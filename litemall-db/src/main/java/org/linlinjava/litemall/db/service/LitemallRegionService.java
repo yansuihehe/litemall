@@ -12,8 +12,16 @@ import java.util.List;
 
 @Service
 public class LitemallRegionService {
+
     @Resource
     private LitemallRegionMapper regionMapper;
+
+    public List<LitemallRegion> getAll(){
+        LitemallRegionExample example = new LitemallRegionExample();
+        byte b = 4;
+        example.or().andTypeNotEqualTo(b);
+        return regionMapper.selectByExample(example);
+    }
 
     public List<LitemallRegion> queryByPid(Integer parentId) {
         LitemallRegionExample example = new LitemallRegionExample();
@@ -42,18 +50,5 @@ public class LitemallRegionService {
 
         PageHelper.startPage(page, size);
         return regionMapper.selectByExample(example);
-    }
-
-    public int countSelective(String name, Integer code, Integer page, Integer size, String sort, String order) {
-        LitemallRegionExample example = new LitemallRegionExample();
-        LitemallRegionExample.Criteria criteria = example.createCriteria();
-
-        if (!StringUtils.isEmpty(name)) {
-            criteria.andNameLike("%" + name + "%");
-        }
-        if (code != null) {
-            criteria.andCodeEqualTo(code);
-        }
-        return (int) regionMapper.countByExample(example);
     }
 }
