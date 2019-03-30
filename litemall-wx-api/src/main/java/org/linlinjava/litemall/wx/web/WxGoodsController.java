@@ -130,8 +130,8 @@ public class WxGoodsController {
 				c.put("addTime", comment.getAddTime());
 				c.put("content", comment.getContent());
 				LitemallUser user = userService.findById(comment.getUserId());
-				c.put("nickname", user.getNickname());
-				c.put("avatar", user.getAvatar());
+				c.put("nickname", user == null ? "" : user.getNickname());
+				c.put("avatar", user == null ? "" : user.getAvatar());
 				c.put("picList", comment.getPicUrls());
 				commentsVo.add(c);
 			}
@@ -281,39 +281,6 @@ public class WxGoodsController {
 		data.put("count", PageInfo.of(goodsList).getTotal());
 		data.put("filterCategoryList", categoryList);
 
-		return ResponseUtil.ok(data);
-	}
-
-	/**
-	 * 新品首发页面的横幅
-	 *
-	 * @return 新品首发页面的横幅
-	 */
-	@GetMapping("new")
-	public Object newGoods() {
-		Map<String, String> bannerInfo = new HashMap<>();
-		bannerInfo.put("url", "");
-		bannerInfo.put("name", SystemConfig.getNewBannerTitle());
-		bannerInfo.put("imgUrl", SystemConfig.getNewImageUrl());
-
-		Map<String, Object> data = new HashMap<>();
-		data.put("bannerInfo", bannerInfo);
-		return ResponseUtil.ok(data);
-	}
-
-	/**
-	 * 人气推荐页面的横幅
-	 *
-	 * @return 人气推荐页面的横幅
-	 */
-	@GetMapping("hot")
-	public Object hotGoods() {
-		Map<String, String> bannerInfo = new HashMap<>();
-		bannerInfo.put("url", "");
-		bannerInfo.put("name", SystemConfig.getHotBannerTitle());
-		bannerInfo.put("imgUrl", SystemConfig.getHotImageUrl());
-		Map<String, Object> data = new HashMap<>();
-		data.put("bannerInfo", bannerInfo);
 		return ResponseUtil.ok(data);
 	}
 
