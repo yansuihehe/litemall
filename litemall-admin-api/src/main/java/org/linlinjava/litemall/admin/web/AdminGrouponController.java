@@ -1,8 +1,10 @@
 package org.linlinjava.litemall.admin.web;
 
+import com.github.pagehelper.PageInfo;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.linlinjava.litemall.admin.annotation.LoginAdmin;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.linlinjava.litemall.admin.annotation.RequiresPermissionsDesc;
 import org.linlinjava.litemall.core.util.ResponseUtil;
 import org.linlinjava.litemall.core.validator.Order;
 import org.linlinjava.litemall.core.validator.Sort;
@@ -36,19 +38,16 @@ public class AdminGrouponController {
     @Autowired
     private LitemallGrouponService grouponService;
 
+    @RequiresPermissions("admin:groupon:read")
+    @RequiresPermissionsDesc(menu={"推广管理" , "团购管理"}, button="详情")
     @GetMapping("/listRecord")
-    public Object listRecord(@LoginAdmin Integer adminId,
-                             String grouponId,
+    public Object listRecord(String grouponId,
                              @RequestParam(defaultValue = "1") Integer page,
                              @RequestParam(defaultValue = "10") Integer limit,
                              @Sort @RequestParam(defaultValue = "add_time") String sort,
                              @Order @RequestParam(defaultValue = "desc") String order) {
-        if (adminId == null) {
-            return ResponseUtil.unlogin();
-        }
-
         List<LitemallGroupon> grouponList = grouponService.querySelective(grouponId, page, limit, sort, order);
-        int total = grouponService.countSelective(grouponId, page, limit, sort, order);
+        long total = PageInfo.of(grouponList).getTotal();
 
         List<Map<String, Object>> records = new ArrayList<>();
         for (LitemallGroupon groupon : grouponList) {
@@ -76,19 +75,16 @@ public class AdminGrouponController {
         return ResponseUtil.ok(data);
     }
 
+    @RequiresPermissions("admin:groupon:list")
+    @RequiresPermissionsDesc(menu={"推广管理" , "团购管理"}, button="查询")
     @GetMapping("/list")
-    public Object list(@LoginAdmin Integer adminId,
-                       String goodsId,
+    public Object list(String goodsId,
                        @RequestParam(defaultValue = "1") Integer page,
                        @RequestParam(defaultValue = "10") Integer limit,
                        @Sort @RequestParam(defaultValue = "add_time") String sort,
                        @Order @RequestParam(defaultValue = "desc") String order) {
-        if (adminId == null) {
-            return ResponseUtil.unlogin();
-        }
-
         List<LitemallGrouponRules> rulesList = rulesService.querySelective(goodsId, page, limit, sort, order);
-        int total = rulesService.countSelective(goodsId, page, limit, sort, order);
+        long total = PageInfo.of(rulesList).getTotal();
         Map<String, Object> data = new HashMap<>();
         data.put("total", total);
         data.put("items", rulesList);
@@ -117,12 +113,10 @@ public class AdminGrouponController {
         return null;
     }
 
+    @RequiresPermissions("admin:groupon:update")
+    @RequiresPermissionsDesc(menu={"推广管理" , "团购管理"}, button="编辑")
     @PostMapping("/update")
-    public Object update(@LoginAdmin Integer adminId, @RequestBody LitemallGrouponRules grouponRules) {
-        if (adminId == null) {
-            return ResponseUtil.unlogin();
-        }
-
+    public Object update(@RequestBody LitemallGrouponRules grouponRules) {
         Object error = validate(grouponRules);
         if (error != null) {
             return error;
@@ -144,13 +138,10 @@ public class AdminGrouponController {
         return ResponseUtil.ok();
     }
 
-
+    @RequiresPermissions("admin:groupon:create")
+    @RequiresPermissionsDesc(menu={"推广管理" , "团购管理"}, button="添加")
     @PostMapping("/create")
-    public Object create(@LoginAdmin Integer adminId, @RequestBody LitemallGrouponRules grouponRules) {
-        if (adminId == null) {
-            return ResponseUtil.unlogin();
-        }
-
+    public Object create(@RequestBody LitemallGrouponRules grouponRules) {
         Object error = validate(grouponRules);
         if (error != null) {
             return error;
@@ -170,13 +161,10 @@ public class AdminGrouponController {
         return ResponseUtil.ok(grouponRules);
     }
 
-
+    @RequiresPermissions("admin:groupon:delete")
+    @RequiresPermissionsDesc(menu={"推广管理" , "团购管理"}, button="删除")
     @PostMapping("/delete")
-    public Object delete(@LoginAdmin Integer adminId, @RequestBody LitemallGrouponRules grouponRules) {
-        if (adminId == null) {
-            return ResponseUtil.unlogin();
-        }
-
+    public Object delete(@RequestBody LitemallGrouponRules grouponRules) {
         Integer id = grouponRules.getId();
         if (id == null) {
             return ResponseUtil.badArgument();
