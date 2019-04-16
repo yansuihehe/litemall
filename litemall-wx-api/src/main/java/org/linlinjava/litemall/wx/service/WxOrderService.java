@@ -25,7 +25,7 @@ import org.linlinjava.litemall.db.service.*;
 import org.linlinjava.litemall.db.util.CouponUserConstant;
 import org.linlinjava.litemall.db.util.OrderHandleOption;
 import org.linlinjava.litemall.db.util.OrderUtil;
-import org.linlinjava.litemall.wx.util.IpUtil;
+import org.linlinjava.litemall.core.util.IpUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -207,6 +207,7 @@ public class WxOrderService {
         orderVo.put("mobile", order.getMobile());
         orderVo.put("address", order.getAddress());
         orderVo.put("goodsPrice", order.getGoodsPrice());
+        orderVo.put("couponPrice", order.getCouponPrice());
         orderVo.put("freightPrice", order.getFreightPrice());
         orderVo.put("actualPrice", order.getActualPrice());
         orderVo.put("orderStatusText", OrderUtil.orderStatusText(order));
