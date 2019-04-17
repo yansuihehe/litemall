@@ -1,8 +1,10 @@
 package org.linlinjava.litemall.admin.web;
 
+import com.github.pagehelper.PageInfo;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.linlinjava.litemall.admin.annotation.LoginAdmin;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.linlinjava.litemall.admin.annotation.RequiresPermissionsDesc;
 import org.linlinjava.litemall.core.util.ResponseUtil;
 import org.linlinjava.litemall.core.validator.Order;
 import org.linlinjava.litemall.core.validator.Sort;
@@ -25,19 +27,16 @@ public class AdminCommentController {
     @Autowired
     private LitemallCommentService commentService;
 
+    @RequiresPermissions("admin:comment:list")
+    @RequiresPermissionsDesc(menu={"商品管理" , "评论管理"}, button="查询")
     @GetMapping("/list")
-    public Object list(@LoginAdmin Integer adminId,
-                       String userId, String valueId,
+    public Object list(String userId, String valueId,
                        @RequestParam(defaultValue = "1") Integer page,
                        @RequestParam(defaultValue = "10") Integer limit,
                        @Sort @RequestParam(defaultValue = "add_time") String sort,
                        @Order @RequestParam(defaultValue = "desc") String order) {
-        if (adminId == null) {
-            return ResponseUtil.unlogin();
-        }
-
         List<LitemallComment> brandList = commentService.querySelective(userId, valueId, page, limit, sort, order);
-        int total = commentService.countSelective(userId, valueId, page, limit, sort, order);
+        long total = PageInfo.of(brandList).getTotal();
         Map<String, Object> data = new HashMap<>();
         data.put("total", total);
         data.put("items", brandList);
@@ -45,11 +44,10 @@ public class AdminCommentController {
         return ResponseUtil.ok(data);
     }
 
+    @RequiresPermissions("admin:comment:delete")
+    @RequiresPermissionsDesc(menu={"商品管理" , "评论管理"}, button="删除")
     @PostMapping("/delete")
-    public Object delete(@LoginAdmin Integer adminId, @RequestBody LitemallComment comment) {
-        if (adminId == null) {
-            return ResponseUtil.unlogin();
-        }
+    public Object delete(@RequestBody LitemallComment comment) {
         Integer id = comment.getId();
         if (id == null) {
             return ResponseUtil.badArgument();
