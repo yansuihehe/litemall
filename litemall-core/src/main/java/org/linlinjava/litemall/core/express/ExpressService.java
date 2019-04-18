@@ -47,8 +47,8 @@ public class ExpressService {
     /**
      * 获取物流信息
      *
-     * @param expCode
-     * @param expNo
+     * @param expCode   快递公司编号
+     * @param expNo     快递号
      * @return
      */
     public ExpressInfo getExpressInfo(String expCode, String expNo) {
