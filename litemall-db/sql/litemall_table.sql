@@ -372,6 +372,7 @@ CREATE TABLE `litemall_goods_product` (
   `specifications` varchar(1023) NOT NULL COMMENT '商品规格值列表，采用JSON数组格式',
   `price` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '商品货品价格',
   `number` int(11) NOT NULL DEFAULT '0' COMMENT '商品货品数量',
+  `commission` decimal(16,2) DEFAULT '0.00' COMMENT '货品的佣金',
   `url` varchar(125) DEFAULT NULL COMMENT '商品货品图片',
   `add_time` datetime DEFAULT NULL COMMENT '创建时间',
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
