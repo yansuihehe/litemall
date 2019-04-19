@@ -193,6 +193,7 @@
         </el-table-column>
         <el-table-column property="price" width="100" label="货品售价"/>
         <el-table-column property="number" width="100" label="货品数量"/>
+        <el-table-column property="commission" width="100" label="货品佣金"/>
         <el-table-column property="url" width="100" label="货品图片">
           <template slot-scope="scope">
             <img v-if="scope.row.url" :src="scope.row.url" width="40">
@@ -223,6 +224,9 @@
           </el-form-item>
           <el-form-item label="货品数量" prop="number">
             <el-input v-model="productForm.number"/>
+          </el-form-item>
+          <el-form-item label="货品佣金" prop="commission">
+            <el-input v-model="productForm.commission"/>
           </el-form-item>
           <el-form-item label="货品图片" prop="url">
             <el-upload
@@ -357,7 +361,7 @@ export default {
       multipleSpec: false,
       specifications: [{ specification: '规格', value: '标准', picUrl: '' }],
       productVisiable: false,
-      productForm: { id: 0, specifications: [], price: 0.00, number: 0, url: '' },
+      productForm: { id: 0, specifications: [], price: 0.00, number: 0, commission: 0.00, url: '' },
       products: [{ id: 0, specifications: ['标准'], price: 0.00, number: 0, url: '' }],
       attributeVisiable: false,
       attributeForm: { attribute: '', value: '' },
