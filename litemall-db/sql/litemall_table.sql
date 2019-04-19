@@ -735,7 +735,7 @@ CREATE TABLE `litemall_user` (
   `mobile` varchar(20) NOT NULL DEFAULT '' COMMENT '用户手机号码',
   `avatar` varchar(255) NOT NULL DEFAULT '' COMMENT '用户头像图片',
   `weixin_openid` varchar(63) NOT NULL DEFAULT '' COMMENT '微信登录openid',
-  `commission` decimal(16,2) NOT NULL DEFAULT '0.00' COMMENT '当前用户账户中的佣金金额',
+  `commission_amount` decimal(16,2) NOT NULL DEFAULT '0.00' COMMENT '当前用户账户中的佣金金额',
   `withdraw_amount` decimal(16,2) NOT NULL DEFAULT '0.00' COMMENT '用户已提现金额',
   `status` tinyint(3) NOT NULL DEFAULT '0' COMMENT '0 可用, 1 禁用, 2 注销',
   `add_time` datetime DEFAULT NULL COMMENT '创建时间',
