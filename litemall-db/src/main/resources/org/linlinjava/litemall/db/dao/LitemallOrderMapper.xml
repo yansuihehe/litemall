@@ -27,6 +27,8 @@
     <result column="ship_channel" jdbcType="VARCHAR" property="shipChannel" />
     <result column="ship_time" jdbcType="TIMESTAMP" property="shipTime" />
     <result column="confirm_time" jdbcType="TIMESTAMP" property="confirmTime" />
+    <result column="recommender_user_id" jdbcType="INTEGER" property="recommenderUserId" />
+    <result column="commission" jdbcType="DECIMAL" property="commission" />
     <result column="comments" jdbcType="SMALLINT" property="comments" />
     <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
     <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
@@ -106,8 +108,8 @@
     -->
     id, user_id, order_sn, order_status, consignee, mobile, address, message, goods_price, 
     freight_price, coupon_price, integral_price, groupon_price, order_price, actual_price, 
-    pay_id, pay_time, ship_sn, ship_channel, ship_time, confirm_time, comments, end_time, 
-    add_time, update_time, deleted
+    pay_id, pay_time, ship_sn, ship_channel, ship_time, confirm_time, recommender_user_id, 
+    commission, comments, end_time, add_time, update_time, deleted
   </sql>
   <select id="selectByExample" parameterType="org.linlinjava.litemall.db.domain.LitemallOrderExample" resultMap="BaseResultMap">
     <!--
@@ -146,8 +148,8 @@
       <otherwise>
         id, user_id, order_sn, order_status, consignee, mobile, address, message, goods_price, 
           freight_price, coupon_price, integral_price, groupon_price, order_price, actual_price, 
-          pay_id, pay_time, ship_sn, ship_channel, ship_time, confirm_time, comments, end_time, 
-          add_time, update_time, deleted
+          pay_id, pay_time, ship_sn, ship_channel, ship_time, confirm_time, recommender_user_id, 
+          commission, comments, end_time, add_time, update_time, deleted
       </otherwise>
     </choose>
     from litemall_order
@@ -208,8 +210,8 @@
       <otherwise>
         id, user_id, order_sn, order_status, consignee, mobile, address, message, goods_price, 
           freight_price, coupon_price, integral_price, groupon_price, order_price, actual_price, 
-          pay_id, pay_time, ship_sn, ship_channel, ship_time, confirm_time, comments, end_time, 
-          add_time, update_time, deleted
+          pay_id, pay_time, ship_sn, ship_channel, ship_time, confirm_time, recommender_user_id, 
+          commission, comments, end_time, add_time, update_time, deleted
       </otherwise>
     </choose>
     from litemall_order
@@ -247,18 +249,20 @@
       coupon_price, integral_price, groupon_price, 
       order_price, actual_price, pay_id, 
       pay_time, ship_sn, ship_channel, 
-      ship_time, confirm_time, comments, 
-      end_time, add_time, update_time, 
-      deleted)
+      ship_time, confirm_time, recommender_user_id, 
+      commission, comments, end_time, 
+      add_time, update_time, deleted
+      )
     values (#{userId,jdbcType=INTEGER}, #{orderSn,jdbcType=VARCHAR}, #{orderStatus,jdbcType=SMALLINT}, 
       #{consignee,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, 
       #{message,jdbcType=VARCHAR}, #{goodsPrice,jdbcType=DECIMAL}, #{freightPrice,jdbcType=DECIMAL}, 
       #{couponPrice,jdbcType=DECIMAL}, #{integralPrice,jdbcType=DECIMAL}, #{grouponPrice,jdbcType=DECIMAL}, 
       #{orderPrice,jdbcType=DECIMAL}, #{actualPrice,jdbcType=DECIMAL}, #{payId,jdbcType=VARCHAR}, 
       #{payTime,jdbcType=TIMESTAMP}, #{shipSn,jdbcType=VARCHAR}, #{shipChannel,jdbcType=VARCHAR}, 
-      #{shipTime,jdbcType=TIMESTAMP}, #{confirmTime,jdbcType=TIMESTAMP}, #{comments,jdbcType=SMALLINT}, 
-      #{endTime,jdbcType=TIMESTAMP}, #{addTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
-      #{deleted,jdbcType=BIT})
+      #{shipTime,jdbcType=TIMESTAMP}, #{confirmTime,jdbcType=TIMESTAMP}, #{recommenderUserId,jdbcType=INTEGER}, 
+      #{commission,jdbcType=DECIMAL}, #{comments,jdbcType=SMALLINT}, #{endTime,jdbcType=TIMESTAMP}, 
+      #{addTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{deleted,jdbcType=BIT}
+      )
   </insert>
   <insert id="insertSelective" parameterType="org.linlinjava.litemall.db.domain.LitemallOrder">
     <!--
@@ -329,6 +333,12 @@
       </if>
       <if test="confirmTime != null">
         confirm_time,
+      </if>
+      <if test="recommenderUserId != null">
+        recommender_user_id,
+      </if>
+      <if test="commission != null">
+        commission,
       </if>
       <if test="comments != null">
         comments,
@@ -406,6 +416,12 @@
       </if>
       <if test="confirmTime != null">
         #{confirmTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="recommenderUserId != null">
+        #{recommenderUserId,jdbcType=INTEGER},
+      </if>
+      <if test="commission != null">
+        #{commission,jdbcType=DECIMAL},
       </if>
       <if test="comments != null">
         #{comments,jdbcType=SMALLINT},
@@ -504,6 +520,12 @@
       <if test="record.confirmTime != null">
         confirm_time = #{record.confirmTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.recommenderUserId != null">
+        recommender_user_id = #{record.recommenderUserId,jdbcType=INTEGER},
+      </if>
+      <if test="record.commission != null">
+        commission = #{record.commission,jdbcType=DECIMAL},
+      </if>
       <if test="record.comments != null">
         comments = #{record.comments,jdbcType=SMALLINT},
       </if>
@@ -551,6 +573,8 @@
       ship_channel = #{record.shipChannel,jdbcType=VARCHAR},
       ship_time = #{record.shipTime,jdbcType=TIMESTAMP},
       confirm_time = #{record.confirmTime,jdbcType=TIMESTAMP},
+      recommender_user_id = #{record.recommenderUserId,jdbcType=INTEGER},
+      commission = #{record.commission,jdbcType=DECIMAL},
       comments = #{record.comments,jdbcType=SMALLINT},
       end_time = #{record.endTime,jdbcType=TIMESTAMP},
       add_time = #{record.addTime,jdbcType=TIMESTAMP},
@@ -627,6 +651,12 @@
       <if test="confirmTime != null">
         confirm_time = #{confirmTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="recommenderUserId != null">
+        recommender_user_id = #{recommenderUserId,jdbcType=INTEGER},
+      </if>
+      <if test="commission != null">
+        commission = #{commission,jdbcType=DECIMAL},
+      </if>
       <if test="comments != null">
         comments = #{comments,jdbcType=SMALLINT},
       </if>
@@ -671,6 +701,8 @@
       ship_channel = #{shipChannel,jdbcType=VARCHAR},
       ship_time = #{shipTime,jdbcType=TIMESTAMP},
       confirm_time = #{confirmTime,jdbcType=TIMESTAMP},
+      recommender_user_id = #{recommenderUserId,jdbcType=INTEGER},
+      commission = #{commission,jdbcType=DECIMAL},
       comments = #{comments,jdbcType=SMALLINT},
       end_time = #{endTime,jdbcType=TIMESTAMP},
       add_time = #{addTime,jdbcType=TIMESTAMP},
@@ -711,8 +743,8 @@
       <otherwise>
         id, user_id, order_sn, order_status, consignee, mobile, address, message, goods_price, 
           freight_price, coupon_price, integral_price, groupon_price, order_price, actual_price, 
-          pay_id, pay_time, ship_sn, ship_channel, ship_time, confirm_time, comments, end_time, 
-          add_time, update_time, deleted
+          pay_id, pay_time, ship_sn, ship_channel, ship_time, confirm_time, recommender_user_id, 
+          commission, comments, end_time, add_time, update_time, deleted
       </otherwise>
     </choose>
     from litemall_order
