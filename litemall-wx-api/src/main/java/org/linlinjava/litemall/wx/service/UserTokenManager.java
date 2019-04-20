@@ -11,6 +11,7 @@ import java.util.Map;
  * 维护用户token
  */
 public class UserTokenManager {
+    // TODO 用户登录的信息放在本地缓存 多节点时考虑此问题
     private static Map<String, UserToken> tokenMap = new HashMap<>();
     private static Map<Integer, UserToken> idMap = new HashMap<>();
 

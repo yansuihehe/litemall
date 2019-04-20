@@ -31,6 +31,10 @@
         </template>
       </el-table-column>
 
+      <el-table-column align="center" label="账户佣金" prop="commissionAmount" />
+
+      <el-table-column align="center" label="提现佣金" prop="withdrawAmount" />
+
       <el-table-column align="center" label="状态" prop="status">
         <template slot-scope="scope">
           <el-tag>{{ statusDic[scope.row.status] }}</el-tag>

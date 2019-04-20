@@ -35,24 +35,40 @@ Page({
   },
 
   // 页面分享
-  onShareAppMessage: function() {
+  onShareAppMessage: function({from, target}) {
     let that = this;
-    return {
-      title: that.data.goods.name,
-      desc: '唯爱与美食不可辜负',
-      path: '/pages/index/index?goodId=' + this.data.id
+    if (from === 'button') { // 页面内分享 TODO 临时当成佣金分享
+        return {
+          title: that.data.goods.name,
+          desc: '唯爱与美食不可辜负',
+          path: '/pages/index/index?goodId=' + this.data.id + '&userId=' + wx.getStorageSync('userInfo').userId
+        }
+    } else {
+      return {
+        title: that.data.goods.name,
+        desc: '唯爱与美食不可辜负',
+        path: '/pages/index/index?goodId=' + this.data.id
+      }
     }
+
   },
 
   shareFriendOrCircle: function() {
-    //var that = this;
-    if (this.data.openShare === false) {
-      this.setData({
-        openShare: !this.data.openShare
+    // var that = this;
+    user.checkLogin().then(() => {
+      if (this.data.openShare === false) {
+        this.setData({
+          openShare: !this.data.openShare
+        });
+      } else {
+        return false;
+      }
+    }).catch(() => { // 没有登录跳转到微信登录页 TODO 登录完成后又回到首页，待修复
+      wx.redirectTo({
+        url: '/pages/auth/login/login'
       });
-    } else {
-      return false;
-    }
+    })
+
   },
   handleSetting: function(e) {
       var that = this;

@@ -12,6 +12,8 @@
 	"libVersion": "2.4.0",
 	"appid": "wx7e58065d6b8b4ef8",
 	"projectname": "litemall-wx",
+	"simulatorType": "wechat",
+	"simulatorPluginLibVersion": {},
 	"condition": {
 		"search": {
 			"current": -1,
@@ -29,7 +31,7 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 22,
+			"current": 39,
 			"list": [
 				{
 					"id": -1,
@@ -265,6 +267,13 @@
 					"pathName": "pages/help/help",
 					"query": "",
 					"scene": null
+				},
+				{
+					"id": 39,
+					"name": "*商品分享",
+					"pathName": "pages/index/index",
+					"query": "goodId=1116011&userId=1",
+					"scene": 1007
 				}
 			]
 		}

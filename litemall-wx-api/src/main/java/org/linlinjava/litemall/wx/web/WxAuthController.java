@@ -93,6 +93,7 @@ public class WxAuthController {
         UserInfo userInfo = new UserInfo();
         userInfo.setNickName(username);
         userInfo.setAvatarUrl(user.getAvatar());
+        userInfo.setUserId(user.getId());
 
         // token
         UserToken userToken = UserTokenManager.generateToken(user.getId());
@@ -158,6 +159,9 @@ public class WxAuthController {
                 return ResponseUtil.updatedDataFailed();
             }
         }
+
+        //设置userId
+        userInfo.setUserId(user.getId());
 
         // token
         UserToken userToken = UserTokenManager.generateToken(user.getId());
