@@ -96,7 +96,7 @@ Page({
     // 页面初始化 options为页面跳转所带来的参数
     if (options.goodId) {
       if (options.userId) {//说明是别人推荐过来的
-        wx.setStorageSync('recommentUserId', options.userId);
+        wx.setStorageSync('recommendUserId', options.userId);
       }
       //这个goodId的值存在则证明首页的开启来源于分享,同时可以通过获取到的goodId的值跳转导航到对应的详情页
       wx.navigateTo({
