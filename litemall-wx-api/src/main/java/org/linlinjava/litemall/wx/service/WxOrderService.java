@@ -26,6 +26,7 @@ import org.linlinjava.litemall.db.util.CouponUserConstant;
 import org.linlinjava.litemall.db.util.OrderHandleOption;
 import org.linlinjava.litemall.db.util.OrderUtil;
 import org.linlinjava.litemall.core.util.IpUtil;
+import org.linlinjava.litemall.wx.service.commission.FixAmountCommissionStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -104,6 +105,8 @@ public class WxOrderService {
     private LitemallCouponUserService couponUserService;
     @Autowired
     private CouponVerifyService couponVerifyService;
+    @Autowired
+    private FixAmountCommissionStrategy fixAmountCommissionStrategy;
 
     private String detailedAddress(LitemallAddress litemallAddress) {
         Integer provinceId = litemallAddress.getProvinceId();
@@ -259,6 +262,7 @@ public class WxOrderService {
         String message = JacksonUtil.parseString(body, "message");
         Integer grouponRulesId = JacksonUtil.parseInteger(body, "grouponRulesId");
         Integer grouponLinkId = JacksonUtil.parseInteger(body, "grouponLinkId");
+        Integer recommenderUserId = JacksonUtil.parseInteger(body, "recommenderUserId");
 
         //如果是团购项目,验证活动是否有效
         if (grouponRulesId != null && grouponRulesId > 0) {
@@ -292,7 +296,7 @@ public class WxOrderService {
 
         // 货品价格
         List<LitemallCart> checkedGoodsList = null;
-        if (cartId.equals(0)) {
+        if (cartId.equals(0)) {//TODO ? 什么意思
             checkedGoodsList = cartService.queryByUidAndChecked(userId);
         } else {
             LitemallCart cart = cartService.findById(cartId);
@@ -365,6 +369,13 @@ public class WxOrderService {
             order.setGrouponPrice(new BigDecimal(0.00));    //  团购价格
         }
 
+        //订单佣金
+        if(recommenderUserId != null && recommenderUserId > 0){
+            BigDecimal orderCommission = fixAmountCommissionStrategy.computeByOrder(order, checkedGoodsList);
+            order.setCommission(orderCommission);
+            order.setRecommenderUserId(recommenderUserId);
+        }
+
         // 添加订单表项
         orderService.add(order);
         orderId = order.getId();
@@ -383,6 +394,10 @@ public class WxOrderService {
             orderGoods.setNumber(cartGoods.getNumber());
             orderGoods.setSpecifications(cartGoods.getSpecifications());
             orderGoods.setAddTime(LocalDateTime.now());
+            //货品佣金
+            if(recommenderUserId != null && recommenderUserId > 0){
+                orderGoods.setCommission(fixAmountCommissionStrategy.computeByProduct(order, cartGoods));
+            }
 
             orderGoodsService.add(orderGoods);
         }

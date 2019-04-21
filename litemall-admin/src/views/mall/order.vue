@@ -31,6 +31,10 @@
 
       <el-table-column align="center" label="支付时间" prop="payTime"/>
 
+      <el-table-column align="center" label="佣金金额" prop="commission"/>
+
+      <el-table-column align="center" label="推荐人" prop="recommenderUserId"/>
+
       <el-table-column align="center" label="物流单号" prop="shipSn"/>
 
       <el-table-column align="center" label="物流渠道" prop="shipChannel"/>

@@ -138,10 +138,11 @@ Page({
       couponId: this.data.couponId,
       message: this.data.message,
       grouponRulesId: this.data.grouponRulesId,
-      grouponLinkId: this.data.grouponLinkId
+      grouponLinkId: this.data.grouponLinkId,
+      recommenderUserId: wx.getStorageSync('recommenderUserId')
     }, 'POST').then(res => {
       if (res.errno === 0) {
-        
+
         // 下单成功，重置couponId
         try {
           wx.setStorageSync('couponId', 0);
