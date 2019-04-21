@@ -15,10 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.linlinjava.litemall.admin.util.AdminResponseCode.GOODS_NAME_EXIST;
 
@@ -161,6 +158,9 @@ public class AdminGoodsService {
         String url = qCodeService.createGoodShareImage(goods.getId().toString(), goods.getPicUrl(), goods.getName());
         goods.setShareUrl(url);
 
+        //设置goods的佣金
+        goods.setCommission(getGoodsCommission(products));
+
         // 商品基本信息表litemall_goods
         if (goodsService.updateById(goods) == 0) {
             throw new RuntimeException("更新数据失败");
@@ -223,6 +223,9 @@ public class AdminGoodsService {
         if (goodsService.checkExistByName(name)) {
             return ResponseUtil.fail(GOODS_NAME_EXIST, "商品名已经存在");
         }
+
+        //设置goods的佣金
+        goods.setCommission(getGoodsCommission(products));
 
         // 商品基本信息表litemall_goods
         goodsService.add(goods);
@@ -319,6 +322,22 @@ public class AdminGoodsService {
         data.put("categoryIds", categoryIds);
 
         return ResponseUtil.ok(data);
+    }
+
+    /**
+     * 根据货品的佣金设置商品的佣金（取货品佣金的最大值）
+     * @param products
+     * @return
+     */
+    private BigDecimal getGoodsCommission(LitemallGoodsProduct[] products){
+        if(products == null || products.length == 0){
+            return BigDecimal.ZERO;
+        }
+        Optional<BigDecimal> minCommission = Arrays.stream(products).map(LitemallGoodsProduct::getCommission).reduce(BigDecimal::min);
+        if(minCommission.isPresent()){
+            return minCommission.get();
+        }
+        return BigDecimal.ZERO;
     }
 
 }

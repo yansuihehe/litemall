@@ -327,6 +327,7 @@ CREATE TABLE `litemall_goods` (
   `unit` varchar(31) DEFAULT '’件‘' COMMENT '商品单位，例如件、盒',
   `counter_price` decimal(10,2) DEFAULT '0.00' COMMENT '专柜价格',
   `retail_price` decimal(10,2) DEFAULT '100000.00' COMMENT '零售价格',
+  `commission` decimal(16,2) DEFAULT '0.00' COMMENT '佣金（取货品佣金的最大值）',
   `detail` text COMMENT '商品详细介绍，是富文本格式',
   `add_time` datetime DEFAULT NULL COMMENT '创建时间',
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
