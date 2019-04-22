@@ -782,3 +782,16 @@ CREATE TABLE `litemall_user_formid` (
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 -- Dump completed on 2018-12-10 16:59:09
+
+DROP TABLE IF EXISTS `litemall_withdraw_apply`;
+CREATE TABLE `litemall_withdraw_apply` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL COMMENT '用户id',
+  `open_id` varchar(63) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '微信用户唯一标识，冗余存储',
+  `withdraw_amount` decimal(16,4) NOT NULL COMMENT '提现金额',
+  `channel` tinyint(4) DEFAULT '1' COMMENT '提现渠道 1：微信 2：银行卡',
+  `status` tinyint(4) DEFAULT '0' COMMENT '状态 0:提交申请，初始状态 1:已通过 2:已驳回',
+  `add_time` datetime DEFAULT NULL COMMENT '提交时间',
+  `update_time` datetime DEFAULT NULL COMMENT '管理员操作时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
