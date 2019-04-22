@@ -92,6 +92,15 @@ page, .container {
   color: #a78845;
 }
 
+.groupon-list  .slant {
+  margin:0 8rpx;
+}
+
+.groupon-list  .commission {
+  font-size: 28rpx;
+  color: #FF7128;
+}
+
 .page {
   width: 750rpx;
   height: 108rpx;

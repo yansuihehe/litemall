@@ -16,6 +16,8 @@
             <view class="price">
               <view class="counterPrice">原价：￥{{item.goods.counterPrice}}</view>
               <view class="retailPrice">现价：￥{{item.groupon_price}}</view>
+              <view class="slant">/</view>
+              <view class="commission">赚{{item.commission}}</view>
             </view>
           </view>
         </view>

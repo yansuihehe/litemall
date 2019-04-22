@@ -75,6 +75,8 @@
               <view class="price">
                 <view class="counterPrice">原价：￥{{item.goods.counterPrice}}</view>
                 <view class="retailPrice">现价：￥{{item.groupon_price}}</view>
+                <text class="slant">/</text>
+                <view class="commission">赚{{item.commission}}</view>
               </view>
             </view>
           </view>
@@ -117,7 +119,11 @@
         <navigator url="../goods/goods?id={{item.id}}">
           <image class="img" src="{{item.picUrl}}" background-size="cover"></image>
           <text class="name">{{item.name}}</text>
-          <text class="price">￥{{item.retailPrice}}</text>
+          <view class="price">
+            <text>￥{{item.retailPrice}}</text>
+            <text class="slant">/</text>
+            <text class="commission">赚{{item.commission}}</text>
+          </view>
         </navigator>
       </view>
     </view>
@@ -139,7 +145,11 @@
             <view class="text">
               <text class="name">{{item.name}}</text>
               <text class="desc">{{item.brief}}</text>
-              <text class="price">￥{{item.retailPrice}}</text>
+              <view class="price">
+                 <text>￥{{item.retailPrice}}</text>
+                 <text class="slant">/</text>
+                 <text class="commission">赚{{item.commission}}</text>
+               </view>
             </view>
           </view>
         </navigator>
@@ -180,7 +190,11 @@
           <navigator url="../goods/goods?id={{iitem.id}}" class="a">
             <image class="img" src="{{iitem.picUrl}}" background-size="cover"></image>
             <text class="name">{{iitem.name}}</text>
-            <text class="price">￥{{iitem.retailPrice}}</text>
+            <view class="price">
+               <text>￥{{iitem.retailPrice}}</text>
+               <text class="slant">/</text>
+               <text class="commission">赚{{item.commission}}</text>
+             </view>
           </navigator>
         </view>
       </block>

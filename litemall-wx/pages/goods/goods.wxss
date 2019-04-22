@@ -144,6 +144,18 @@
   padding-left: 5%;
   font-size: 30rpx;
   color: #a78845;
+  float:left;
+}
+
+.goods-info .slant {
+  float:left;
+  padding:2rpx 8rpx;
+  font-size:30rpx;
+}
+
+.goods-info .commission {
+  font-size: 30rpx;
+  color: #FF7128;
 }
 
 .goods-info .brand {
@@ -561,10 +573,18 @@
 .related-goods .item .price {
   display: block;
   width: 311.45rpx;
-  height: 30rpx;
   text-align: center;
   font-size: 30rpx;
   color: #b4282d;
+}
+
+.related-goods .item .slant {
+  margin:0 8rpx;
+}
+
+.related-goods .item .commission {
+  font-size: 28rpx;
+  color: #FF7128;
 }
 
 .bottom-btn {

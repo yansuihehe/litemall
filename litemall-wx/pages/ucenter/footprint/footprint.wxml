@@ -14,7 +14,11 @@
           <view class="info">
             <view class="name">{{iitem.name}}</view>
             <view class="subtitle">{{iitem.brief}}</view>
-            <view class="price">￥{{iitem.retailPrice}}</view>
+            <view class="price">
+              <text>￥{{iitem.retailPrice}}</text>
+              <text class="slant">/</text>
+              <text class="commission">赚{{item.commission}}</text>
+            </view>
           </view>
         </view>
       </view>

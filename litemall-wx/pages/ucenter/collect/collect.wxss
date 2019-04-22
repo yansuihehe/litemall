@@ -98,3 +98,12 @@ page {
   color: #333;
   line-height: 40rpx;
 }
+
+.item .info .slant {
+  margin:0 8rpx;
+}
+
+.item .info .commission {
+  font-size: 28rpx;
+  color: #FF7128;
+}
