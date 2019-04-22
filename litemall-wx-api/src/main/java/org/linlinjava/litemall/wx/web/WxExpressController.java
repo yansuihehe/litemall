@@ -2,6 +2,7 @@ package org.linlinjava.litemall.wx.web;
 
 import org.linlinjava.litemall.core.express.ExpressService;
 import org.linlinjava.litemall.core.express.dao.ExpressInfo;
+import org.linlinjava.litemall.core.util.ResponseUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,7 +34,7 @@ public class WxExpressController {
             throw new RuntimeException("获取快递信息失败");
         }
         result.put("expressInfo", expressInfo);
-        return result;
+        return (Map) ResponseUtil.ok(expressInfo);
     }
 
 }
