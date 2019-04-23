@@ -50,6 +50,40 @@ page {
   font-size: 30rpx;
 }
 
+.user_cinfo{
+  width:100%;
+  height:140rpx;
+  background:#ab956d;
+}
+
+.user_cinfo_opac{
+  width:100%;
+  height:100%;
+  background:#000;
+  opacity:0.1;
+}
+
+.user_tcolumn {
+  height: 140rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top:-140rpx;
+
+}
+
+.user_tcolumn_item {
+  width: 50%;
+  text-align: center;
+  position: relative;
+}
+
+.user_tcolumn_item_text {
+  margin-top: 5rpx;
+  font-size: 35rpx;
+  color: #fff;
+}
+
 .user_area {
   /* border: 1px solid black; */
   width: 100%;
@@ -113,7 +147,7 @@ page {
   color: #fff;
   border-radius: 50%;
   margin-top: 20rpx;
-  margin-left: 40rpx;
+  margin-left: 25rpx;
 }
 
 .user_column_item_image {
@@ -145,6 +179,10 @@ page {
   float: left;
   background: #fff;
   border-bottom: 1px solid #fafafa;
+  padding: 0;
+  margin: 0;
+  height:140rpx;
+  line-height:100%;
 }
 
 .user_column_item_phone::after {
@@ -152,12 +190,27 @@ page {
 }
 
 .logout {
-  margin-top: 30rpx;
+  margin-top: 50rpx;
   height: 100rpx;
   width: 100%;
   line-height: 100rpx;
   text-align: center;
-  background: #fff;
-  color: red;
+  background: #ff7128;
+  color: #fff;
   font-size: 30rpx;
+  letter-spacing:5rpx;
+  border-radius:30rpx;
+}
+
+.iconstyle{
+   color:#ff7128;
+   padding-top:32rpx;
+   font-size:55rpx;
+}
+
+.iconphone{
+  width:100%;
+  margin-top:8rpx;
+  margin-bottom:5rpx;
+
 }

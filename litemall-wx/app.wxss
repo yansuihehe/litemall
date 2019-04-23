@@ -1,5 +1,5 @@
 /**app.wxss**/
-
+@import "/lib/style/iconfont.wxss";
 .container {
   box-sizing: border-box;
   background-color: #f4f4f4;
@@ -16,4 +16,13 @@ view, text {
   font-family: PingFangSC-Light, helvetica, 'Heiti SC';
   font-size: 29rpx;
   color: #333;
+}
+
+.slant {
+  margin:0 8rpx;
+}
+
+.commission {
+  font-size: 28rpx;
+  color: #FF7128;
 }

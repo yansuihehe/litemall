@@ -50,7 +50,7 @@
   "tabBar": {
     "backgroundColor": "#fafafa",
     "borderStyle": "white",
-    "selectedColor": "#AB956D",
+    "selectedColor": "#FF7128",
     "color": "#666",
     "list": [
       {
@@ -85,6 +85,5 @@
     "uploadFile": 10000,
     "downloadFile": 10000
   },
-  "debug": true,
-  "sitemapLocation": "sitemap.json"
+  "debug": true
 }

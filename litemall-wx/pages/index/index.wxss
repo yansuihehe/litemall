@@ -280,15 +280,6 @@
   color: #a78845;
 }
 
-.a-groupon .b .slant {
-  margin:0 8rpx;
-}
-
-.a-groupon .b .commission {
-  font-size: 28rpx;
-  color: #FF7128;
-}
-
 .a-new .b {
   width: 750rpx;
   height: auto;
@@ -330,15 +321,6 @@
   line-height: 30rpx;
   font-size: 30rpx;
   color: #ab956d;
-}
-
-.a-new .b .slant {
-  margin:0 8rpx;
-}
-
-.a-new .b .commission {
-  font-size: 28rpx;
-  color: #FF7128;
 }
 
 .a-popular {
@@ -402,15 +384,6 @@
   color: #ab956d;
   line-height: 50rpx;
   font-size: 33rpx;
-}
-
-.a-popular .b .slant {
-  margin:0 8rpx;
-}
-
-.a-popular .b .commission {
-  font-size: 28rpx;
-  color: #FF7128;
 }
 
 .a-topic .b {
@@ -532,15 +505,6 @@
   text-align: center;
   font-size: 30rpx;
   color: #ab956d;
-}
-
-.good-grid .item .slant {
-  margin:0 8rpx;
-}
-
-.good-grid .item .commission {
-  font-size: 28rpx;
-  color: #FF7128;
 }
 
 .good-grid .t {

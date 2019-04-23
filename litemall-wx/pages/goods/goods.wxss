@@ -155,7 +155,6 @@
 
 .goods-info .commission {
   font-size: 30rpx;
-  color: #FF7128;
 }
 
 .goods-info .brand {
@@ -576,15 +575,6 @@
   text-align: center;
   font-size: 30rpx;
   color: #b4282d;
-}
-
-.related-goods .item .slant {
-  margin:0 8rpx;
-}
-
-.related-goods .item .commission {
-  font-size: 28rpx;
-  color: #FF7128;
 }
 
 .bottom-btn {

@@ -116,12 +116,3 @@
   font-size: 30rpx;
   color: #ab956d;
 }
-
-.cate-item .item .slant {
-  margin:0 8rpx;
-}
-
-.cate-item .item .commission {
-  font-size: 28rpx;
-  color: #FF7128;
-}
