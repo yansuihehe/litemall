@@ -195,11 +195,9 @@ page {
   width: 100%;
   line-height: 100rpx;
   text-align: center;
-  background: #ff7128;
-  color: #fff;
+  background: #fff;
+  color:red;
   font-size: 30rpx;
-  letter-spacing:5rpx;
-  border-radius:30rpx;
 }
 
 .iconstyle{

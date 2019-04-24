@@ -116,7 +116,8 @@
   border-bottom-right-radius: 0rpx;
   letter-spacing: 3rpx;
   /* background-image: linear-gradient(to right, #ff7701 100%); */
-  background-image: linear-gradient(to right, #9a9ba1 0%, #9a9ba1 100%);
+  /*background-image: linear-gradient(to right, #9a9ba1 0%, #9a9ba1 100%);*/
+  background-color:#f48f18;
 }
 
 .goods-info .desc {
@@ -693,9 +694,33 @@
   height: 100%;
   position: fixed;
   background: rgba(0, 0, 0, 0.5);
-  z-index: 8;
+  z-index: 11;
   bottom: 0;
   /* display: none; */
+}
+
+.attr-pop-box .confirm-info{
+  width:100%;
+  position: fixed;
+  bottom: 0;
+  background:#fff;
+  position: fixed;
+  z-index: 13;
+  height:100rpx;
+}
+
+.attr-pop-box .confirm-info .confirm-btn{
+  width:95%;
+  height:80rpx;
+  margin:10rpx auto;
+  background-color:#ff7128;
+  color:#fff;
+  text-align:center;
+  line-height:80rpx;
+  font-size:35rpx;
+  letter-spacing:16rpx;
+  border-radius:10rpx;
+
 }
 
 .attr-pop {
@@ -705,7 +730,7 @@
   padding: 31.25rpx;
   background: #fff;
   position: fixed;
-  z-index: 9;
+  z-index: 12;
   bottom: 100rpx;
 }
 
@@ -790,6 +815,7 @@
   border: 1px solid #333;
   font-size: 25rpx;
   color: #333;
+  border-radius:10rpx;
 }
 
 .spec-con .value.disable {
@@ -798,8 +824,9 @@
 }
 
 .spec-con .value.selected {
-  border: 1px solid #b4282d;
-  color: #b4282d;
+  border: 1px solid #ff7128;
+  color: #ff7128;
+  border-radius:10rpx;
 }
 
 .number-item .selnum {
@@ -851,7 +878,7 @@
   height: 100%;
   position: fixed;
   background: rgba(0, 0, 0, 0.5);
-  z-index: 8;
+  z-index: 11;
   bottom: 0;
   /* display: none; */
 }
@@ -863,8 +890,8 @@
   padding: 31.25rpx;
   background: #fff;
   position: fixed;
-  z-index: 9;
-  bottom: 100rpx;
+  z-index: 12;
+  bottom: 0;
 }
 
 .share-pop .close {
@@ -878,6 +905,29 @@
 .share-pop .close .icon {
   width: 48rpx;
   height: 48rpx;
+}
+
+.share-pop .share-notes {
+  width:100%;
+  padding:0 20rpx;
+  margin-top:90rpx;
+  text-align:center;
+}
+
+.share-pop .share-notes .h{
+  font-size:45rpx;
+  margin-bottom:20rpx;
+}
+
+.share-pop .share-notes .h .m{
+  color:#ff7128;
+  font-size:45rpx;
+  font-weight:bold;
+  padding-left:12rpx;
+}
+
+.share-pop .share-notes .h{
+  line-height:50rpx;
 }
 
 .share-pop .share-info {

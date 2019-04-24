@@ -32,6 +32,7 @@ Page({
     isGroupon: false, //标识是否是一个参团购买
     soldout: false,
     canWrite: false, //用户是否获取了保存相册的权限
+    actionType:"",//购买操作类型
   },
 
   // 页面分享
@@ -660,6 +661,21 @@ Page({
 
   },
 
+  //添加到购物车或者立即购买（先自动计入购物车）
+  addToBuy:function(event){
+      let that=this;
+      if(event.currentTarget.dataset.type){
+        that.setData({
+            actionType: event.currentTarget.dataset.type
+        });
+    }
+    if(that.data.actionType=="cart"){
+        that.addToCart();
+    }else if(that.data.actionType=="buy"){
+        that.addFast();
+    }
+  },
+  
   cutNumber: function() {
     this.setData({
       number: (this.data.number - 1 > 1) ? this.data.number - 1 : 1
