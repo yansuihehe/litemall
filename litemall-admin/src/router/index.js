@@ -350,6 +350,16 @@ export const asyncRouterMap = [
           title: '团购活动',
           noCache: true
         }
+      },
+      {
+        path: 'withdraw-apply',
+        component: () => import('@/views/promotion/withdraw'),
+        name: 'withdraw-apply',
+        meta: {
+          perms: ['GET /admin/withdraw/list', 'POST /admin/withdraw/approve', 'POST /admin/withdraw/reject'],
+          title: '佣金提现',
+          noCache: true
+        }
       }
     ]
   },

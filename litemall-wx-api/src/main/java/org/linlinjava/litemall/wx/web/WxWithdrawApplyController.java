@@ -23,7 +23,7 @@ import java.math.BigDecimal;
 @RestController
 @RequestMapping("/wx/withdraw")
 @Validated
-public class WxWithdrawAppleController {
+public class WxWithdrawApplyController {
 
     @Autowired
     private LitemallUserService userService;
