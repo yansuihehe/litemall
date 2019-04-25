@@ -20,7 +20,9 @@
 
       <el-table-column align="center" label="提现金额" prop="withdrawAmount"/>
 
-      <el-table-column align="center" label="提现渠道" prop="channel" />
+      <el-table-column align="center" label="提现渠道" prop="channel">
+        <template slot-scope="scope">{{ scope.row.channel | formatChannel }}</template>
+      </el-table-column>
 
       <el-table-column align="center" label="状态" prop="status">
         <template slot-scope="scope">{{ scope.row.status | formatStatus }}</template>
@@ -30,8 +32,8 @@
 
       <el-table-column align="center" label="操作" width="300" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button v-permission="['GET /admin/withdraw/approve']" type="primary" size="mini" @click="handleApprove(scope.row.id)">通过</el-button>
-          <el-button v-permission="['POST /admin/withdraw/reject']" type="danger" size="mini" @click="handleReject(scope.row.id)">拒绝</el-button>
+          <el-button v-permission="['GET /admin/withdraw/approve']" v-show="scope.row.status === 0" type="primary" size="mini" @click="handleApprove(scope.row.id)">通过</el-button>
+          <el-button v-permission="['POST /admin/withdraw/reject']" v-show="scope.row.status === 0" type="danger" size="mini" @click="handleReject(scope.row.id)">拒绝</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -72,6 +74,11 @@ export default {
         return '审核通过'
       } else {
         return '审核拒绝'
+      }
+    },
+    formatChannel(channel) {
+      if (channel === 1) {
+        return '微信零钱'
       }
     }
   },

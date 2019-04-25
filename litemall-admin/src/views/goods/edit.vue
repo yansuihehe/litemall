@@ -164,6 +164,7 @@
           </template>
         </el-table-column>
         <el-table-column property="price" width="100" label="货品售价"/>
+        <el-table-column property="memberPrice" width="100" label="货品会员价"/>
         <el-table-column property="number" width="100" label="货品数量"/>
         <el-table-column property="commission" width="100" label="货品佣金"/>
         <el-table-column property="url" width="100" label="货品图片">
@@ -187,6 +188,9 @@
           </el-form-item>
           <el-form-item label="货品售价" prop="price">
             <el-input v-model="productForm.price"/>
+          </el-form-item>
+          <el-form-item label="货品会员价" prop="memberPrice">
+            <el-input v-model="productForm.memberPrice"/>
           </el-form-item>
           <el-form-item label="货品数量" prop="number">
             <el-input v-model="productForm.number"/>
@@ -317,6 +321,7 @@ export default {
         id: 0,
         specifications: [],
         price: 0.0,
+        memberPrice: null,
         number: 0,
         commission: 0.00,
         url: ''
