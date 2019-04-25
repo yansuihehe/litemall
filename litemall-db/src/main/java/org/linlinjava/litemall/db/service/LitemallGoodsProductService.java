@@ -1,6 +1,5 @@
 package org.linlinjava.litemall.db.service;
 
-import org.apache.ibatis.annotations.Param;
 import org.linlinjava.litemall.db.dao.GoodsProductMapper;
 import org.linlinjava.litemall.db.dao.LitemallGoodsProductMapper;
 import org.linlinjava.litemall.db.domain.LitemallGoodsProduct;
