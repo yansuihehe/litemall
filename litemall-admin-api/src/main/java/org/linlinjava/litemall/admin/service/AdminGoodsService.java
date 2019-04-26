@@ -7,15 +7,32 @@ import org.linlinjava.litemall.admin.dto.GoodsAllinone;
 import org.linlinjava.litemall.admin.vo.CatVo;
 import org.linlinjava.litemall.core.qcode.QCodeService;
 import org.linlinjava.litemall.core.util.ResponseUtil;
-import org.linlinjava.litemall.db.domain.*;
-import org.linlinjava.litemall.db.service.*;
+import org.linlinjava.litemall.db.domain.LitemallBrand;
+import org.linlinjava.litemall.db.domain.LitemallCategory;
+import org.linlinjava.litemall.db.domain.LitemallGoods;
+import org.linlinjava.litemall.db.domain.LitemallGoodsAttribute;
+import org.linlinjava.litemall.db.domain.LitemallGoodsProduct;
+import org.linlinjava.litemall.db.domain.LitemallGoodsSpecification;
+import org.linlinjava.litemall.db.service.LitemallBrandService;
+import org.linlinjava.litemall.db.service.LitemallCartService;
+import org.linlinjava.litemall.db.service.LitemallCategoryService;
+import org.linlinjava.litemall.db.service.LitemallGoodsAttributeService;
+import org.linlinjava.litemall.db.service.LitemallGoodsProductService;
+import org.linlinjava.litemall.db.service.LitemallGoodsService;
+import org.linlinjava.litemall.db.service.LitemallGoodsSpecificationService;
+import org.linlinjava.litemall.db.service.LitemallOrderGoodsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 import static org.linlinjava.litemall.admin.util.AdminResponseCode.GOODS_NAME_EXIST;
 
@@ -154,12 +171,14 @@ public class AdminGoodsService {
 
         Integer id = goods.getId();
 
-        //将生成的分享图片地址写入数据库
+        // 将生成的分享图片地址写入数据库
         String url = qCodeService.createGoodShareImage(goods.getId().toString(), goods.getPicUrl(), goods.getName());
         goods.setShareUrl(url);
 
-        //设置goods的佣金
-        goods.setCommission(getGoodsCommission(products));
+        // 设置goods的佣金
+        goods.setCommission(this.getGoodsCommission(products));
+        // 设置最低会员价格
+        goods.setMemberPriceMin(this.getGoodsMemberPrice(products));
 
         // 商品基本信息表litemall_goods
         if (goodsService.updateById(goods) == 0) {
@@ -224,8 +243,10 @@ public class AdminGoodsService {
             return ResponseUtil.fail(GOODS_NAME_EXIST, "商品名已经存在");
         }
 
-        //设置goods的佣金
-        goods.setCommission(getGoodsCommission(products));
+        // 设置goods的佣金
+        goods.setCommission(this.getGoodsCommission(products));
+        // 设置最低会员价格
+        goods.setMemberPriceMin(this.getGoodsMemberPrice(products));
 
         // 商品基本信息表litemall_goods
         goodsService.add(goods);
@@ -333,9 +354,25 @@ public class AdminGoodsService {
         if(products == null || products.length == 0){
             return BigDecimal.ZERO;
         }
-        Optional<BigDecimal> minCommission = Arrays.stream(products).map(LitemallGoodsProduct::getCommission).reduce(BigDecimal::min);
-        if(minCommission.isPresent()){
-            return minCommission.get();
+        Optional<BigDecimal> maxCommission = Arrays.stream(products).map(LitemallGoodsProduct::getCommission).reduce(BigDecimal::max);
+        if(maxCommission.isPresent()){
+            return maxCommission.get();
+        }
+        return BigDecimal.ZERO;
+    }
+
+    /**
+     * 根据商品对应货品中最小会员价
+     * @param products
+     * @return
+     */
+    private BigDecimal getGoodsMemberPrice(LitemallGoodsProduct[] products){
+        if(products == null || products.length == 0){
+            return BigDecimal.ZERO;
+        }
+        Optional<BigDecimal> minMemberPrice = Arrays.stream(products).map(LitemallGoodsProduct::getMemberPrice).reduce(BigDecimal::min);
+        if(minMemberPrice.isPresent()){
+            return minMemberPrice.get();
         }
         return BigDecimal.ZERO;
     }

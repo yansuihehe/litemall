@@ -23,6 +23,7 @@
     <result column="unit" jdbcType="VARCHAR" property="unit" />
     <result column="counter_price" jdbcType="DECIMAL" property="counterPrice" />
     <result column="retail_price" jdbcType="DECIMAL" property="retailPrice" />
+    <result column="member_price_min" jdbcType="DECIMAL" property="memberPriceMin" />
     <result column="commission" jdbcType="DECIMAL" property="commission" />
     <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
@@ -146,7 +147,7 @@
     -->
     id, goods_sn, `name`, category_id, brand_id, gallery, keywords, brief, is_on_sale, 
     sort_order, pic_url, share_url, is_new, is_hot, unit, counter_price, retail_price, 
-    commission, add_time, update_time, deleted
+    member_price_min, commission, add_time, update_time, deleted
   </sql>
   <sql id="Blob_Column_List">
     <!--
@@ -212,7 +213,7 @@
       <otherwise>
         id, goods_sn, `name`, category_id, brand_id, gallery, keywords, brief, is_on_sale, 
           sort_order, pic_url, share_url, is_new, is_hot, unit, counter_price, retail_price, 
-          commission, add_time, update_time, deleted, detail
+          member_price_min, commission, add_time, update_time, deleted, detail
       </otherwise>
     </choose>
     from litemall_goods
@@ -277,7 +278,7 @@
       <otherwise>
         id, goods_sn, `name`, category_id, brand_id, gallery, keywords, brief, is_on_sale, 
           sort_order, pic_url, share_url, is_new, is_hot, unit, counter_price, retail_price, 
-          commission, add_time, update_time, deleted, detail
+          member_price_min, commission, add_time, update_time, deleted, detail
       </otherwise>
     </choose>
     from litemall_goods
@@ -314,17 +315,17 @@
       keywords, brief, is_on_sale, 
       sort_order, pic_url, share_url, 
       is_new, is_hot, unit, counter_price, 
-      retail_price, commission, add_time, 
-      update_time, deleted, detail
-      )
+      retail_price, member_price_min, commission, 
+      add_time, update_time, deleted, 
+      detail)
     values (#{goodsSn,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{categoryId,jdbcType=INTEGER}, 
       #{brandId,jdbcType=INTEGER}, #{gallery,jdbcType=VARCHAR,typeHandler=org.linlinjava.litemall.db.mybatis.JsonStringArrayTypeHandler}, 
       #{keywords,jdbcType=VARCHAR}, #{brief,jdbcType=VARCHAR}, #{isOnSale,jdbcType=BIT}, 
       #{sortOrder,jdbcType=SMALLINT}, #{picUrl,jdbcType=VARCHAR}, #{shareUrl,jdbcType=VARCHAR}, 
       #{isNew,jdbcType=BIT}, #{isHot,jdbcType=BIT}, #{unit,jdbcType=VARCHAR}, #{counterPrice,jdbcType=DECIMAL}, 
-      #{retailPrice,jdbcType=DECIMAL}, #{commission,jdbcType=DECIMAL}, #{addTime,jdbcType=TIMESTAMP}, 
-      #{updateTime,jdbcType=TIMESTAMP}, #{deleted,jdbcType=BIT}, #{detail,jdbcType=LONGVARCHAR}
-      )
+      #{retailPrice,jdbcType=DECIMAL}, #{memberPriceMin,jdbcType=DECIMAL}, #{commission,jdbcType=DECIMAL}, 
+      #{addTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{deleted,jdbcType=BIT}, 
+      #{detail,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="org.linlinjava.litemall.db.domain.LitemallGoods">
     <!--
@@ -383,6 +384,9 @@
       </if>
       <if test="retailPrice != null">
         retail_price,
+      </if>
+      <if test="memberPriceMin != null">
+        member_price_min,
       </if>
       <if test="commission != null">
         commission,
@@ -448,6 +452,9 @@
       </if>
       <if test="retailPrice != null">
         #{retailPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="memberPriceMin != null">
+        #{memberPriceMin,jdbcType=DECIMAL},
       </if>
       <if test="commission != null">
         #{commission,jdbcType=DECIMAL},
@@ -534,6 +541,9 @@
       <if test="record.retailPrice != null">
         retail_price = #{record.retailPrice,jdbcType=DECIMAL},
       </if>
+      <if test="record.memberPriceMin != null">
+        member_price_min = #{record.memberPriceMin,jdbcType=DECIMAL},
+      </if>
       <if test="record.commission != null">
         commission = #{record.commission,jdbcType=DECIMAL},
       </if>
@@ -577,6 +587,7 @@
       unit = #{record.unit,jdbcType=VARCHAR},
       counter_price = #{record.counterPrice,jdbcType=DECIMAL},
       retail_price = #{record.retailPrice,jdbcType=DECIMAL},
+      member_price_min = #{record.memberPriceMin,jdbcType=DECIMAL},
       commission = #{record.commission,jdbcType=DECIMAL},
       add_time = #{record.addTime,jdbcType=TIMESTAMP},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
@@ -609,6 +620,7 @@
       unit = #{record.unit,jdbcType=VARCHAR},
       counter_price = #{record.counterPrice,jdbcType=DECIMAL},
       retail_price = #{record.retailPrice,jdbcType=DECIMAL},
+      member_price_min = #{record.memberPriceMin,jdbcType=DECIMAL},
       commission = #{record.commission,jdbcType=DECIMAL},
       add_time = #{record.addTime,jdbcType=TIMESTAMP},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
@@ -672,6 +684,9 @@
       <if test="retailPrice != null">
         retail_price = #{retailPrice,jdbcType=DECIMAL},
       </if>
+      <if test="memberPriceMin != null">
+        member_price_min = #{memberPriceMin,jdbcType=DECIMAL},
+      </if>
       <if test="commission != null">
         commission = #{commission,jdbcType=DECIMAL},
       </if>
@@ -712,6 +727,7 @@
       unit = #{unit,jdbcType=VARCHAR},
       counter_price = #{counterPrice,jdbcType=DECIMAL},
       retail_price = #{retailPrice,jdbcType=DECIMAL},
+      member_price_min = #{memberPriceMin,jdbcType=DECIMAL},
       commission = #{commission,jdbcType=DECIMAL},
       add_time = #{addTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
@@ -741,6 +757,7 @@
       unit = #{unit,jdbcType=VARCHAR},
       counter_price = #{counterPrice,jdbcType=DECIMAL},
       retail_price = #{retailPrice,jdbcType=DECIMAL},
+      member_price_min = #{memberPriceMin,jdbcType=DECIMAL},
       commission = #{commission,jdbcType=DECIMAL},
       add_time = #{addTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
@@ -799,7 +816,7 @@
       <otherwise>
         id, goods_sn, `name`, category_id, brand_id, gallery, keywords, brief, is_on_sale, 
           sort_order, pic_url, share_url, is_new, is_hot, unit, counter_price, retail_price, 
-          commission, add_time, update_time, deleted, detail
+          member_price_min, commission, add_time, update_time, deleted, detail
       </otherwise>
     </choose>
     from litemall_goods
