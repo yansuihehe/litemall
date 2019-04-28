@@ -1,0 +1,22 @@
+page {
+  height: 100%;
+  width: 100%;
+  background: #f4f4f4;
+}
+
+.container {
+  background: #f4f4f4;
+  height: auto;
+  overflow: hidden;
+  width: 100%;
+}
+
+.member-info{
+  height: 100%;
+  width: 100%;
+}
+
+.member-info_image{
+    min-width:273rpx;
+    height:2473rpx;
+}

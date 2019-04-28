@@ -1,0 +1,6 @@
+<!--member.wxml-->
+<view class="container">
+  <view class="member-info">
+    <image class='member-info_image' src='/static/images/member.jpg'></image>
+  </view>
+</view>

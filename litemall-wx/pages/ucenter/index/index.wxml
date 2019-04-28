@@ -10,13 +10,13 @@
     </view>
   </view>
   <view class='user_tcolumn'>
-     <view class='user_tcolumn_item'>
-        <view class='user_tcolumn_item_text'>￥30</view>
+     <view class='user_tcolumn_item' bindtap='goMember'>
+        <view class='user_tcolumn_item_text'>￥{{user.commissionAmount}}</view>
         <view class='user_tcolumn_item_text'>我的佣金</view>
      </view>
-     <view class='user_tcolumn_item'>
-       <view class='user_tcolumn_item_text'>10</view>
-       <view class='user_tcolumn_item_text'>我的分享</view>
+     <view class='user_tcolumn_item' bindtap='goWithdraw'>
+       <view class='user_tcolumn_item_text'>￥{{user.withdrawAmount}}</view>
+       <view class='user_tcolumn_item_text'>我的提现</view>
      </view>
   </view>
 

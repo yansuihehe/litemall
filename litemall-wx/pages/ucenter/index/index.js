@@ -15,6 +15,10 @@ Page({
       unrecv: 0,
       uncomment: 0
     },
+    user:{
+      commissionAmount:0,
+      withdrawAmount:0
+    },
     hasLogin: false
   },
   onLoad: function(options) {
@@ -37,7 +41,8 @@ Page({
       util.request(api.UserIndex).then(function(res) {
         if (res.errno === 0) {
           that.setData({
-            order: res.data.order
+            order: res.data.order,
+            user:res.data.user
           });
         }
       });
@@ -200,7 +205,19 @@ Page({
     wx.navigateTo({
       url: '/pages/help/help'
     });
-  },  
+  },
+  goMember: function () {
+      wx.navigateTo({
+          url: '/pages/ucenter/member/member'
+      });
+  },
+  goWithdraw: function () {
+    let that = this;
+      wx.navigateTo({
+          url: '/pages/ucenter/withdraw/withdraw?money=' + that.data.user.commissionAmount
+      });
+  },
+
   exitLogin: function() {
     wx.showModal({
       title: '',

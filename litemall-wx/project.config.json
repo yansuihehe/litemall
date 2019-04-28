@@ -269,6 +269,20 @@
 					"scene": null
 				},
 				{
+					"id": -1,
+					"name": "会员简介",
+					"pathName": "pages/ucenter/member/member",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "佣金提现",
+					"pathName": "pages/ucenter/withdraw/withdraw",
+					"query": "money=1",
+					"scene": null
+				},
+				{
 					"id": 39,
 					"name": "*商品分享",
 					"pathName": "pages/index/index",

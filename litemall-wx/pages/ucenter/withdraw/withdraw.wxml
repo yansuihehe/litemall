@@ -1,0 +1,18 @@
+<!--withdraw.wxml-->
+<view class="container">
+  <view class="withdraw-info">
+    <view class="withdraw-detail">
+      <view class="h">提现金额</view>
+      <view class="money">
+        <view class="money-i">￥</view>
+        <input class="money-v" type="digit" bindinput="bindinputMoney" placeholder="" value="{{applyAmount}}" auto-focus/>
+      </view>
+      <view class="d">可提现总额{{amountAll}}元</view>
+    </view>
+
+  <view class="btns">
+    <button class="apply" bindtap="withdrawApply">申请提现</button>
+  </view>
+
+  </view>
+</view>

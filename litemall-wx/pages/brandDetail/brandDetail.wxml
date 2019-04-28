@@ -23,7 +23,7 @@
           <view class="price">
              <text>￥{{iitem.retailPrice}}</text>
              <text class="slant">/</text>
-             <text class="commission">赚{{item.commission}}</text>
+             <text class="commission">赚{{iitem.commission}}</text>
            </view>
         </navigator>
       </block>

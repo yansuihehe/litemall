@@ -1,6 +1,6 @@
 // 以下是业务服务器API地址
 // 本机开发时使用
-var WxApiRoot = 'http://localhost:8080/wx/';
+var WxApiRoot = 'http://localhost:8082/wx/';
 // 局域网测试使用
 // var WxApiRoot = 'http://192.168.0.101:8080/wx/';
 // 云平台部署时使用
@@ -97,5 +97,7 @@ module.exports = {
 
   UserIndex: WxApiRoot + 'user/index', //个人页面用户相关信息
   IssueList: WxApiRoot + 'issue/list', //帮助信息
+
+  WithdrawApply:WxApiRoot + 'withdraw/apply', //提现申请
 
 };
