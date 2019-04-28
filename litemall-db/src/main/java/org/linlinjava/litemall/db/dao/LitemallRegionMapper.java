@@ -4,6 +4,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 import org.linlinjava.litemall.db.domain.LitemallRegion;
 import org.linlinjava.litemall.db.domain.LitemallRegionExample;
+import org.linlinjava.litemall.db.domain.RegionQueryVo;
 
 public interface LitemallRegionMapper {
     /**
@@ -129,4 +130,6 @@ public interface LitemallRegionMapper {
      * @mbg.generated
      */
     int updateByPrimaryKey(LitemallRegion record);
+
+    List<RegionQueryVo> getAllRegionInfo();
 }

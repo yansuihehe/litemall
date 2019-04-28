@@ -1,5 +1,6 @@
 package org.linlinjava.litemall.admin.vo;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class RegionVo {
@@ -8,7 +9,7 @@ public class RegionVo {
     private Byte type;
     private Integer code;
 
-    private List<RegionVo> children;
+    private List<RegionVo> children = new ArrayList<>();
 
     public Integer getId() {
         return id;

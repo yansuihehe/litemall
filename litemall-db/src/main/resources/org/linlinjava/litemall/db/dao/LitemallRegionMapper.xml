@@ -12,6 +12,21 @@
     <result column="type" jdbcType="TINYINT" property="type" />
     <result column="code" jdbcType="INTEGER" property="code" />
   </resultMap>
+
+  <resultMap id="RegionMap" type="org.linlinjava.litemall.db.domain.RegionQueryVo">
+    <result column="province_id" jdbcType="INTEGER" property="provinceId" />
+    <result column="province_name" jdbcType="INTEGER" property="provinceName" />
+    <result column="province_type" jdbcType="VARCHAR" property="provinceType" />
+    <result column="province_code" jdbcType="TINYINT" property="provinceCode" />
+    <result column="city_id" jdbcType="INTEGER" property="cityId" />
+    <result column="city_name" jdbcType="INTEGER" property="cityName" />
+    <result column="city_type" jdbcType="VARCHAR" property="cityType" />
+    <result column="city_code" jdbcType="TINYINT" property="cityCode" />
+    <result column="area_id" jdbcType="INTEGER" property="areaId" />
+    <result column="area_name" jdbcType="INTEGER" property="areaName" />
+    <result column="area_type" jdbcType="VARCHAR" property="areaType" />
+    <result column="area_code" jdbcType="TINYINT" property="areaCode" />
+  </resultMap>
   <sql id="Example_Where_Clause">
     <!--
       WARNING - @mbg.generated
@@ -358,5 +373,12 @@
       order by ${example.orderByClause}
     </if>
     limit 1
+  </select>
+
+  <select id="getAllRegionInfo" resultType="org.linlinjava.litemall.db.domain.RegionQueryVo" resultMap="RegionMap">
+    select lp.id as province_id, lp.name as province_name, lp.type as province_type, lp.code as province_code, lc.id as city_id,  lc.name as city_name, lc.type as city_type, lc.code as city_code, la.id as area_id, la.name as area_name, la.type as area_type, la.code as area_code  from litemall_region lp
+    left join litemall_region lc on lp.id = lc.pid
+    left join litemall_region la on la.pid = lc.id
+    where lp.type = 1
   </select>
 </mapper>
