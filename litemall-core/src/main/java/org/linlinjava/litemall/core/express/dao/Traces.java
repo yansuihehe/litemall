@@ -17,6 +17,8 @@ public class Traces {
     private String AcceptStation;
     @JsonProperty("AcceptTime")
     private String AcceptTime;
+    @JsonProperty("Remark")
+    private String Remark;
 
     public String getAcceptStation() {
         return AcceptStation;
@@ -34,4 +36,11 @@ public class Traces {
         this.AcceptTime = AcceptTime;
     }
 
+    public String getRemark() {
+        return Remark;
+    }
+
+    public void setRemark(String remark) {
+        Remark = remark;
+    }
 }

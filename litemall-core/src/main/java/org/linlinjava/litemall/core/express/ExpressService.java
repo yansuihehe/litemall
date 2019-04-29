@@ -18,7 +18,8 @@ import java.util.Map;
  */
 public class ExpressService {
     //请求url
-    private String ReqURL = "http://api.kdniao.com/Ebusiness/EbusinessOrderHandle.aspx";
+//    private String ReqURL = "http://api.kdniao.com/Ebusiness/EbusinessOrderHandle.aspx";
+    private String ReqURL = "http://sandboxapi.kdniao.com:8080/kdniaosandbox/gateway/exterfaceInvoke.json";
 
     private ExpressProperties properties;
 

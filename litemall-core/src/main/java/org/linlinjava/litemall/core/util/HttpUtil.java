@@ -1,5 +1,8 @@
 package org.linlinjava.litemall.core.util;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -14,6 +17,7 @@ import java.util.Map;
  * @return 远程资源的响应结果
  */
 public class HttpUtil {
+    private Log log = LogFactory.getLog(HttpUtil.class);
     /**
      * 向指定 URL 发送POST方法的请求
      *
