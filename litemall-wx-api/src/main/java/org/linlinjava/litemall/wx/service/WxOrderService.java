@@ -321,6 +321,7 @@ public class WxOrderService {
             if (grouponRules != null && grouponRules.getGoodsId().equals(checkGoods.getGoodsId())) {
                 checkedGoodsPrice = checkedGoodsPrice.add(checkGoods.getPrice().subtract(grouponPrice).multiply(new BigDecimal(checkGoods.getNumber())));
             } else {
+                //TODO 如果为会员，则为会员价
                 checkedGoodsPrice = checkedGoodsPrice.add(checkGoods.getPrice().multiply(new BigDecimal(checkGoods.getNumber())));
             }
         }
