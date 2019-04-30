@@ -6,6 +6,7 @@ import org.linlinjava.litemall.core.system.SystemConfig;
 import org.linlinjava.litemall.db.domain.LitemallGoodsProduct;
 import org.linlinjava.litemall.db.domain.LitemallOrder;
 import org.linlinjava.litemall.db.domain.LitemallOrderGoods;
+import org.linlinjava.litemall.db.service.CommissionService;
 import org.linlinjava.litemall.db.service.LitemallGoodsProductService;
 import org.linlinjava.litemall.db.service.LitemallOrderGoodsService;
 import org.linlinjava.litemall.db.service.LitemallOrderService;
@@ -31,6 +32,8 @@ public class OrderJob {
     private LitemallOrderService orderService;
     @Autowired
     private LitemallGoodsProductService productService;
+    @Autowired
+    private CommissionService commissionService;
 
     /**
      * 自动取消订单
@@ -92,6 +95,8 @@ public class OrderJob {
                 logger.info("订单 ID=" + order.getId() + " 数据已经更新，放弃自动确认收货");
             } else {
                 logger.info("订单 ID=" + order.getId() + " 已经超期自动确认收货");
+                //计算佣金打入用户账户
+                commissionService.addCommission(order.getId());
             }
         }
     }

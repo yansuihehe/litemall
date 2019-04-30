@@ -2,6 +2,7 @@ package org.linlinjava.litemall.db.service;
 
 import com.github.pagehelper.PageHelper;
 import org.linlinjava.litemall.db.dao.LitemallUserMapper;
+import org.linlinjava.litemall.db.dao.UserMapper;
 import org.linlinjava.litemall.db.domain.LitemallUser;
 import org.linlinjava.litemall.db.domain.LitemallUserExample;
 import org.linlinjava.litemall.db.domain.UserVo;
@@ -14,8 +15,12 @@ import java.util.List;
 
 @Service
 public class LitemallUserService {
+
     @Resource
     private LitemallUserMapper userMapper;
+
+    @Resource
+    private UserMapper uMapper;
 
     public LitemallUser findById(Integer userId) {
         return userMapper.selectByPrimaryKey(userId);
@@ -99,5 +104,11 @@ public class LitemallUserService {
 
     public void deleteById(Integer id) {
         userMapper.logicalDeleteByPrimaryKey(id);
+    }
+
+    public int updateWithOptimisticLocker(LitemallUser user) {
+        LocalDateTime preUpdateTime = user.getUpdateTime();
+        user.setUpdateTime(LocalDateTime.now());
+        return uMapper.updateWithOptimisticLocker(preUpdateTime, user);
     }
 }

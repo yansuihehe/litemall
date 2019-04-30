@@ -18,6 +18,7 @@ import org.linlinjava.litemall.core.notify.NotifyType;
 import org.linlinjava.litemall.core.qcode.QCodeService;
 import org.linlinjava.litemall.core.system.SystemConfig;
 import org.linlinjava.litemall.core.util.DateTimeUtil;
+import org.linlinjava.litemall.core.util.IpUtil;
 import org.linlinjava.litemall.core.util.JacksonUtil;
 import org.linlinjava.litemall.core.util.ResponseUtil;
 import org.linlinjava.litemall.db.domain.*;
@@ -25,7 +26,6 @@ import org.linlinjava.litemall.db.service.*;
 import org.linlinjava.litemall.db.util.CouponUserConstant;
 import org.linlinjava.litemall.db.util.OrderHandleOption;
 import org.linlinjava.litemall.db.util.OrderUtil;
-import org.linlinjava.litemall.core.util.IpUtil;
 import org.linlinjava.litemall.wx.service.commission.FixAmountCommissionStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -107,6 +107,8 @@ public class WxOrderService {
     private CouponVerifyService couponVerifyService;
     @Autowired
     private FixAmountCommissionStrategy fixAmountCommissionStrategy;
+    @Autowired
+    private CommissionService commissionService;
 
     private String detailedAddress(LitemallAddress litemallAddress) {
         Integer provinceId = litemallAddress.getProvinceId();
@@ -262,7 +264,6 @@ public class WxOrderService {
         String message = JacksonUtil.parseString(body, "message");
         Integer grouponRulesId = JacksonUtil.parseInteger(body, "grouponRulesId");
         Integer grouponLinkId = JacksonUtil.parseInteger(body, "grouponLinkId");
-        Integer recommenderUserId = JacksonUtil.parseInteger(body, "recommenderUserId");
 
         //如果是团购项目,验证活动是否有效
         if (grouponRulesId != null && grouponRulesId > 0) {
@@ -370,10 +371,11 @@ public class WxOrderService {
         }
 
         //订单佣金
-        if(recommenderUserId != null && recommenderUserId > 0){
+        LitemallUser user = userService.findById(userId);
+        if(user.getSuperior() != null){
             BigDecimal orderCommission = fixAmountCommissionStrategy.computeByOrder(order, checkedGoodsList);
             order.setCommission(orderCommission);
-            order.setRecommenderUserId(recommenderUserId);
+            order.setRecommenderUserId(user.getSuperior());
         }
 
         // 添加订单表项
@@ -395,7 +397,7 @@ public class WxOrderService {
             orderGoods.setSpecifications(cartGoods.getSpecifications());
             orderGoods.setAddTime(LocalDateTime.now());
             //货品佣金
-            if(recommenderUserId != null && recommenderUserId > 0){
+            if(user.getSuperior() != null){
                 orderGoods.setCommission(fixAmountCommissionStrategy.computeByProduct(order, cartGoods));
             }
 
@@ -788,6 +790,8 @@ public class WxOrderService {
         order.setConfirmTime(LocalDateTime.now());
         if (orderService.updateWithOptimisticLocker(order) == 0) {
             return ResponseUtil.updatedDateExpired();
+        } else { //更新成功增加上级用户账户佣金
+            commissionService.addCommission(orderId);
         }
         return ResponseUtil.ok();
     }

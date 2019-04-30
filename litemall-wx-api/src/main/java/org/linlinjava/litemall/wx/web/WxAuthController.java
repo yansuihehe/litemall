@@ -147,6 +147,7 @@ public class WxAuthController {
             user.setStatus((byte) 0);
             user.setLastLoginTime(LocalDateTime.now());
             user.setLastLoginIp(IpUtil.getIpAddr(request));
+            user.setSuperior(wxLoginInfo.getSuperior());//没注册过设置上级
 
             userService.add(user);
 

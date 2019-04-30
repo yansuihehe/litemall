@@ -138,8 +138,7 @@ Page({
       couponId: this.data.couponId,
       message: this.data.message,
       grouponRulesId: this.data.grouponRulesId,
-      grouponLinkId: this.data.grouponLinkId,
-      recommenderUserId: wx.getStorageSync('recommenderUserId')
+      grouponLinkId: this.data.grouponLinkId
     }, 'POST').then(res => {
       if (res.errno === 0) {
 

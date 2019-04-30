@@ -31,7 +31,7 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 39,
+			"current": 41,
 			"list": [
 				{
 					"id": -1,
@@ -283,10 +283,10 @@
 					"scene": null
 				},
 				{
-					"id": 39,
+					"id": 41,
 					"name": "*商品分享",
 					"pathName": "pages/index/index",
-					"query": "goodId=1116011&userId=1",
+					"query": "goodId=1116011&userId=2",
 					"scene": 1007
 				}
 			]

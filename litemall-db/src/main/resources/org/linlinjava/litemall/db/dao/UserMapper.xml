@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.linlinjava.litemall.db.dao.UserMapper">
+
+    <update id="updateWithOptimisticLocker" parameterType="map">
+        update litemall_user
+        <set>
+            <if test="user.id != null">
+                id = #{user.id,jdbcType=INTEGER},
+            </if>
+            <if test="user.username != null">
+                username = #{user.username,jdbcType=VARCHAR},
+            </if>
+            <if test="user.password != null">
+                `password` = #{user.password,jdbcType=VARCHAR},
+            </if>
+            <if test="user.gender != null">
+                gender = #{user.gender,jdbcType=TINYINT},
+            </if>
+            <if test="user.birthday != null">
+                birthday = #{user.birthday,jdbcType=DATE},
+            </if>
+            <if test="user.lastLoginTime != null">
+                last_login_time = #{user.lastLoginTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="user.lastLoginIp != null">
+                last_login_ip = #{user.lastLoginIp,jdbcType=VARCHAR},
+            </if>
+            <if test="user.userLevel != null">
+                user_level = #{user.userLevel,jdbcType=TINYINT},
+            </if>
+            <if test="user.nickname != null">
+                nickname = #{user.nickname,jdbcType=VARCHAR},
+            </if>
+            <if test="user.mobile != null">
+                mobile = #{user.mobile,jdbcType=VARCHAR},
+            </if>
+            <if test="user.avatar != null">
+                avatar = #{user.avatar,jdbcType=VARCHAR},
+            </if>
+            <if test="user.weixinOpenid != null">
+                weixin_openid = #{user.weixinOpenid,jdbcType=VARCHAR},
+            </if>
+            <if test="user.commissionAmount != null">
+                commission_amount = #{user.commissionAmount,jdbcType=DECIMAL},
+            </if>
+            <if test="user.withdrawAmount != null">
+                withdraw_amount = #{user.withdrawAmount,jdbcType=DECIMAL},
+            </if>
+            <if test="user.superior != null">
+                superior = #{user.superior,jdbcType=INTEGER},
+            </if>
+            <if test="user.status != null">
+                `status` = #{user.status,jdbcType=TINYINT},
+            </if>
+            <if test="user.addTime != null">
+                add_time = #{user.addTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="user.updateTime != null">
+                update_time = #{user.updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="user.deleted != null">
+                deleted = #{user.deleted,jdbcType=BIT},
+            </if>
+        </set>
+        where id = #{user.id,jdbcType=INTEGER} and update_time = #{lastUpdateTime,jdbcType=INTEGER}
+    </update>
+
+</mapper>
