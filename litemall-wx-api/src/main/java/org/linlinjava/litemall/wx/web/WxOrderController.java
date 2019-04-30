@@ -164,4 +164,16 @@ public class WxOrderController {
         return wxOrderService.comment(userId, body);
     }
 
+    /**
+     * 用户赚取佣金的来源订单
+     * @param userId 用户ID
+     * @return
+     */
+    @GetMapping("/commission/order")
+    public Object getCommissionSourceOrders(@LoginUser Integer userId,
+                                            @RequestParam(defaultValue = "1") Integer page,
+                                            @RequestParam(defaultValue = "10") Integer limit){
+        return wxOrderService.getCommissionSourceOrders(userId, page, limit);
+    }
+
 }

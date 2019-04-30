@@ -145,6 +145,20 @@ public class WxOrderService {
         long count = PageInfo.of(orderList).getTotal();
         int totalPages = (int) Math.ceil((double) count / limit);
 
+        Map<String, Object> result = new HashMap<>();
+        result.put("count", count);
+        result.put("data", convertOrder(orderList));
+        result.put("totalPages", totalPages);
+
+        return ResponseUtil.ok(result);
+    }
+
+    /**
+     * 订单数据结构转换 用于返回微信端
+     * @param orderList
+     * @return
+     */
+    private List<Map<String, Object>> convertOrder(List<LitemallOrder> orderList){
         List<Map<String, Object>> orderVoList = new ArrayList<>(orderList.size());
         for (LitemallOrder order : orderList) {
             Map<String, Object> orderVo = new HashMap<>();
@@ -175,13 +189,7 @@ public class WxOrderService {
 
             orderVoList.add(orderVo);
         }
-
-        Map<String, Object> result = new HashMap<>();
-        result.put("count", count);
-        result.put("data", orderVoList);
-        result.put("totalPages", totalPages);
-
-        return ResponseUtil.ok(result);
+        return orderVoList;
     }
 
     /**
@@ -938,6 +946,28 @@ public class WxOrderService {
         orderService.updateWithOptimisticLocker(order);
 
         return ResponseUtil.ok();
+    }
+
+    /**
+     * 查询用户佣金的来源订单
+     * @param userId 用户ID
+     * @param page 页码
+     * @param limit 每页多少条
+     * @return
+     */
+    public Object getCommissionSourceOrders(Integer userId, Integer page, Integer limit){
+        if (userId == null) {
+            return ResponseUtil.unlogin();
+        }
+        List<LitemallOrder> orderList = orderService.queryOrderBySuperior(page, limit, userId);
+        long count = PageInfo.of(orderList).getTotal();
+        int totalPages = (int) Math.ceil((double) count / limit);
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("count", count);
+        result.put("data", convertOrder(orderList));
+        result.put("totalPages", totalPages);
+        return ResponseUtil.ok(result);
     }
 
 }

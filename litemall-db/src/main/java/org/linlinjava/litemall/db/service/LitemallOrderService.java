@@ -1,6 +1,7 @@
 package org.linlinjava.litemall.db.service;
 
 import com.github.pagehelper.PageHelper;
+import com.google.common.collect.Lists;
 import org.linlinjava.litemall.db.dao.LitemallOrderMapper;
 import org.linlinjava.litemall.db.dao.OrderMapper;
 import org.linlinjava.litemall.db.domain.LitemallOrder;
@@ -180,6 +181,23 @@ public class LitemallOrderService {
         LocalDateTime expired = now.minusDays(days);
         LitemallOrderExample example = new LitemallOrderExample();
         example.or().andCommentsGreaterThan((short) 0).andConfirmTimeLessThan(expired).andDeletedEqualTo(false);
+        return litemallOrderMapper.selectByExample(example);
+    }
+
+    /**
+     * 上级查询下级用户的订单（佣金收益来源订单）
+     * @param offset
+     * @param limit
+     * @param userId 上级用户id
+     * @return
+     */
+    public List<LitemallOrder> queryOrderBySuperior(Integer offset, Integer limit, Integer userId){
+        LitemallOrderExample example = new LitemallOrderExample();
+        LitemallOrderExample.Criteria criteria = example.or();
+        criteria.andRecommenderUserIdEqualTo(userId);
+        criteria.andOrderStatusIn(Lists.newArrayList(OrderUtil.STATUS_AUTO_CONFIRM, OrderUtil.STATUS_CONFIRM));
+        example.setOrderByClause("add_time desc");
+        PageHelper.startPage(offset, limit);
         return litemallOrderMapper.selectByExample(example);
     }
 }
