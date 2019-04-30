@@ -32,48 +32,6 @@ public class AdminRegionController {
         return ResponseUtil.ok(regionList);
     }
 
-    public Object list() {
-        List<RegionVo> regionVoList = new ArrayList<>();
-
-        List<LitemallRegion> provinceList = regionService.queryByPid(0);
-        for(LitemallRegion province : provinceList){
-            RegionVo provinceVO = new RegionVo();
-            provinceVO.setId(province.getId());
-            provinceVO.setName(province.getName());
-            provinceVO.setCode(province.getCode());
-            provinceVO.setType(province.getType());
-
-            List<LitemallRegion> cityList = regionService.queryByPid(province.getId());
-            List<RegionVo> cityVOList = new ArrayList<>();
-            for(LitemallRegion city : cityList){
-                RegionVo cityVO = new RegionVo();
-                cityVO.setId(city.getId());
-                cityVO.setName(city.getName());
-                cityVO.setCode(city.getCode());
-                cityVO.setType(city.getType());
-
-                List<LitemallRegion> areaList = regionService.queryByPid(city.getId());
-                List<RegionVo> areaVOList = new ArrayList<>();
-                for(LitemallRegion area : areaList){
-                    RegionVo areaVO = new RegionVo();
-                    areaVO.setId(area.getId());
-                    areaVO.setName(area.getName());
-                    areaVO.setCode(area.getCode());
-                    areaVO.setType(area.getType());
-                    areaVOList.add(areaVO);
-                }
-
-                cityVO.setChildren(areaVOList);
-                cityVOList.add(cityVO);
-            }
-            provinceVO.setChildren(cityVOList);
-            regionVoList.add(provinceVO);
-        }
-
-        return ResponseUtil.ok(regionVoList);
-    }
-
-
     @GetMapping("/list")
     public Object getAllList(){
         List<RegionVo> result = new ArrayList<>();

@@ -19,6 +19,8 @@ public class ExpressInfo {
     private String LogisticCode;
     @JsonProperty("ShipperCode")
     private String ShipperCode;
+    @JsonProperty(value = "OrderCode")
+    private String OrderCode;
     @JsonProperty("Traces")
     private List<Traces> Traces;
     @JsonProperty("State")
@@ -78,6 +80,14 @@ public class ExpressInfo {
 
     public void setSuccess(boolean Success) {
         this.Success = Success;
+    }
+
+    public String getOrderCode() {
+        return OrderCode;
+    }
+
+    public void setOrderCode(String orderCode) {
+        OrderCode = orderCode;
     }
 
     public String getReason() {
