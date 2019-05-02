@@ -77,8 +77,9 @@
         </table>
         <table tableName="litemall_seckill">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-            <columnOverride column="specifications" javaType="java.lang.String[]"
-                            typeHandler="org.linlinjava.litemall.db.mybatis.JsonStringArrayTypeHandler"/>
+        </table>
+        <table tableName="litemall_seckill_rules">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
         <table tableName="litemall_category">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
