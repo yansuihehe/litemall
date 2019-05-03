@@ -81,4 +81,11 @@ public class LitemallSeckillRulesServiceImpl implements LitemallSeckillRulesServ
         }
         return false;
     }
+
+    @Override
+    public LitemallSeckillRules queryById(Integer id) {
+        LitemallSeckillRulesExample example = new LitemallSeckillRulesExample();
+        example.or().andIdEqualTo(id).andDeletedEqualTo(false);
+        return litemallSeckillRulesMapper.selectOneByExample(example);
+    }
 }

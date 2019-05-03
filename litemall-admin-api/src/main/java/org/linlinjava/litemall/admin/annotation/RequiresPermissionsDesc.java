@@ -1,7 +1,5 @@
 package org.linlinjava.litemall.admin.annotation;
 
-import org.apache.shiro.authz.annotation.RequiresPermissions;
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

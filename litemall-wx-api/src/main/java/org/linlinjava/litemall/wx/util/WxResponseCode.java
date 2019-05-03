@@ -33,5 +33,8 @@ public class WxResponseCode {
     public static final int COUPON_RECEIVE_FAIL= 741;
     public static final int COUPON_CODE_INVALID= 742;
 
+    // 秒杀
+    public static final Integer SECKILl_EXPIRED = 750;
+
 
 }

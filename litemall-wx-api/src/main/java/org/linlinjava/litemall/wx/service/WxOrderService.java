@@ -11,6 +11,7 @@ import com.github.pagehelper.PageInfo;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.checkerframework.checker.units.qual.A;
 import org.linlinjava.litemall.core.express.ExpressService;
 import org.linlinjava.litemall.core.express.dao.ExpressInfo;
 import org.linlinjava.litemall.core.notify.NotifyService;
@@ -21,6 +22,7 @@ import org.linlinjava.litemall.core.util.DateTimeUtil;
 import org.linlinjava.litemall.core.util.IpUtil;
 import org.linlinjava.litemall.core.util.JacksonUtil;
 import org.linlinjava.litemall.core.util.ResponseUtil;
+import org.linlinjava.litemall.db.dao.LitemallSeckillRulesMapper;
 import org.linlinjava.litemall.db.domain.*;
 import org.linlinjava.litemall.db.service.*;
 import org.linlinjava.litemall.db.util.CouponUserConstant;
@@ -107,6 +109,10 @@ public class WxOrderService {
     private CouponVerifyService couponVerifyService;
     @Autowired
     private FixAmountCommissionStrategy fixAmountCommissionStrategy;
+    @Autowired
+    private LitemallSeckillRulesMapper litemallSeckillRulesMapper;
+    @Autowired
+    private LitemallSeckillRulesService litemallSeckillRulesService;
     @Autowired
     private CommissionService commissionService;
 
@@ -272,6 +278,8 @@ public class WxOrderService {
         String message = JacksonUtil.parseString(body, "message");
         Integer grouponRulesId = JacksonUtil.parseInteger(body, "grouponRulesId");
         Integer grouponLinkId = JacksonUtil.parseInteger(body, "grouponLinkId");
+        Integer seckillRulesId = JacksonUtil.parseInteger(body, "seckillRulesId");
+        Integer seckillId = JacksonUtil.parseInteger(body, "seckillId");
 
         //如果是团购项目,验证活动是否有效
         if (grouponRulesId != null && grouponRulesId > 0) {
@@ -283,6 +291,19 @@ public class WxOrderService {
             //团购活动已经过期
             if (grouponRulesService.isExpired(rules)) {
                 return ResponseUtil.fail(GROUPON_EXPIRED, "团购活动已过期!");
+            }
+        }
+
+        // 如果是秒杀项目，验证有效性
+        LitemallSeckillRules litemallSeckillRules = null;
+        if (seckillRulesId != null && seckillRulesId > 0) {
+            litemallSeckillRules = litemallSeckillRulesService.queryById(seckillId);
+            if (litemallSeckillRules == null) {
+                return ResponseUtil.badArgument();
+            }
+            // 验证是否过期
+            if (litemallSeckillRules.getExpireTime().isBefore(LocalDateTime.now())) {
+                return ResponseUtil.fail(SECKILl_EXPIRED, "秒杀活动已过期!");
             }
         }
 
@@ -320,6 +341,10 @@ public class WxOrderService {
             //  只有当团购规格商品ID符合才进行团购优惠
             if (grouponRules != null && grouponRules.getGoodsId().equals(checkGoods.getGoodsId())) {
                 checkedGoodsPrice = checkedGoodsPrice.add(checkGoods.getPrice().subtract(grouponPrice).multiply(new BigDecimal(checkGoods.getNumber())));
+            } else if (seckillRulesId != null && litemallSeckillRules.getGoodsId().equals(checkGoods.getGoodsId())) {
+                // 如果为秒杀商品，价格=(货品价格-秒杀优惠金额)*商品数量
+                checkedGoodsPrice = checkedGoodsPrice.add(checkGoods.getPrice().subtract(litemallSeckillRules.getDiscount().multiply(new BigDecimal(checkGoods.getNumber()))));
+
             } else {
                 //TODO 如果为会员，则为会员价
                 checkedGoodsPrice = checkedGoodsPrice.add(checkGoods.getPrice().multiply(new BigDecimal(checkGoods.getNumber())));

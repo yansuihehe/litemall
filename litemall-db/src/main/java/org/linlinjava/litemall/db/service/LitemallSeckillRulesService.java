@@ -40,5 +40,12 @@ public interface LitemallSeckillRulesService {
      */
     boolean seckill(LitemallSeckillRules litemallSeckillRules);
 
+    /**
+     * 根据id查询有效的秒杀规则信息.
+     * @param id
+     * @return
+     */
+    LitemallSeckillRules queryById(Integer id);
+
 
 }
