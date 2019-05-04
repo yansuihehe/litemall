@@ -13,6 +13,7 @@ import org.linlinjava.litemall.db.service.LitemallUserService;
 import org.linlinjava.litemall.wx.service.UserTokenManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -48,7 +49,7 @@ public class RequestInterceptor {
 
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         String wechatToken = request.getHeader("X-Litemall-Token");
-        if (wechatToken == null)
+        if (StringUtils.isEmpty(wechatToken) || wechatToken == null)
             return;
 
         // 拦截微信用户token，获取用户信息，放至ThreadLocal中

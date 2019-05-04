@@ -156,4 +156,12 @@ public interface LitemallSeckillRulesMapper {
      * @project https://github.com/itfsw/mybatis-generator-plugin
      */
     int logicalDeleteByPrimaryKey(Integer id);
+
+
+    /**
+     * 秒杀商品数量减一处理.
+     * @param id
+     * @return
+     */
+    int seckill(Integer id);
 }
