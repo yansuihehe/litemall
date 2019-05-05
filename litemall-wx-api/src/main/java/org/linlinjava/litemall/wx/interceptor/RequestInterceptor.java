@@ -56,7 +56,8 @@ public class RequestInterceptor {
         Integer userId = UserTokenManager.getUserId(wechatToken);
         if (userId == null) {
             logger.error("wechatToken:" + wechatToken + ", 无效token。");
-            throw new RuntimeException("无效token");
+            return;
+//            throw new RuntimeException("无效token");
         }
         LitemallUser user = litemallUserService.findById(userId);
         if (user == null) {
