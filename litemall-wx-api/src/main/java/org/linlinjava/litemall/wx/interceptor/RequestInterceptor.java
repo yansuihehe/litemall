@@ -53,7 +53,11 @@ public class RequestInterceptor {
             return;
 
         // 拦截微信用户token，获取用户信息，放至ThreadLocal中
-        int userId = UserTokenManager.getUserId(wechatToken);
+        Integer userId = UserTokenManager.getUserId(wechatToken);
+        if (userId == null) {
+            logger.error("wechatToken:" + wechatToken + ", 无效token。");
+            throw new RuntimeException("无效token");
+        }
         LitemallUser user = litemallUserService.findById(userId);
         if (user == null) {
             throw new RuntimeException("用户不存在");
