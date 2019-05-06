@@ -46,7 +46,7 @@ public class LitemallWithdrawApplyService {
      * @param openid
      * @return
      */
-    public List<LitemallWithdrawApply> query(Integer offset, Integer limit, Byte status, String openid){
+    public List<LitemallWithdrawApply> query(Integer offset, Integer limit, Byte status, String openid, Integer userId){
         LitemallWithdrawApplyExample example = new LitemallWithdrawApplyExample();
         LitemallWithdrawApplyExample.Criteria criteria = example.or();
         if(status != null){
@@ -54,6 +54,9 @@ public class LitemallWithdrawApplyService {
         }
         if(!StringUtils.isEmpty(openid)){
             criteria.andOpenIdEqualTo(openid);
+        }
+        if(userId != null){
+            criteria.andUserIdEqualTo(userId);
         }
         example.setOrderByClause("add_time desc");
         PageHelper.startPage(offset, limit);

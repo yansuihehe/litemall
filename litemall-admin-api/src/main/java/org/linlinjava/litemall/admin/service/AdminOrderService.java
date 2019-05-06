@@ -108,6 +108,7 @@ public class AdminOrderService {
             return ResponseUtil.badArgument();
         }
 
+        //FIXME 现在只能退整个订单的商品 不能选择订单中的某个商品进行单独退货退款 后续需要改造
         if (order.getActualPrice().compareTo(new BigDecimal(refundMoney)) != 0) {
             return ResponseUtil.badArgumentValue();
         }
@@ -157,6 +158,8 @@ public class AdminOrderService {
                 throw new RuntimeException("商品货品库存增加失败");
             }
         }
+
+        //TODO 上级用户佣金扣除 暂时不处理
 
         //TODO 发送邮件和短信通知，这里采用异步发送
         // 退款成功通知用户, 例如“您申请的订单退款 [ 单号:{1} ] 已成功，请耐心等待到账。”

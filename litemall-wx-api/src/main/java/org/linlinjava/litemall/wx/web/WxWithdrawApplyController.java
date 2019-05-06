@@ -1,20 +1,21 @@
 package org.linlinjava.litemall.wx.web;
 
+import com.github.pagehelper.PageInfo;
 import org.linlinjava.litemall.core.util.JacksonUtil;
 import org.linlinjava.litemall.core.util.ResponseUtil;
 import org.linlinjava.litemall.db.domain.LitemallUser;
+import org.linlinjava.litemall.db.domain.LitemallWithdrawApply;
 import org.linlinjava.litemall.db.service.LitemallUserService;
 import org.linlinjava.litemall.db.service.LitemallWithdrawApplyService;
 import org.linlinjava.litemall.wx.annotation.LoginUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 用户提现申请
@@ -56,6 +57,29 @@ public class WxWithdrawApplyController {
         String openid = user.getWeixinOpenid();
         withdrawApplyService.apply(userId, amount, channel, openid);
         return ResponseUtil.ok();
+    }
+
+    /**
+     * 获取用户提现记录
+     * @param userId
+     * @param page
+     * @param limit
+     * @return
+     */
+    @GetMapping("/applications")
+    public Object getWithdrawApplications(@LoginUser Integer userId,
+                                          @RequestParam(defaultValue = "1") Integer page,
+                                          @RequestParam(defaultValue = "10") Integer limit){
+        if(userId == null){
+            return ResponseUtil.unlogin();
+        }
+
+        List<LitemallWithdrawApply> result = withdrawApplyService.query(page, limit, null, null, userId);
+        long total = PageInfo.of(result).getTotal();
+        Map<String, Object> data = new HashMap<>();
+        data.put("total", total);
+        data.put("items", result);
+        return ResponseUtil.ok(data);
     }
 
 }
