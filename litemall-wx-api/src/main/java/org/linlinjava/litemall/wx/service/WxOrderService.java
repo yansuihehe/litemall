@@ -326,9 +326,9 @@ public class WxOrderService {
 
         // 货品价格
         List<LitemallCart> checkedGoodsList = null;
-        if (cartId.equals(0)) {//TODO ? 什么意思
+        if (cartId.equals(0)) {// 通过购物车购买
             checkedGoodsList = cartService.queryByUidAndChecked(userId);
-        } else {
+        } else { // 立即购买
             LitemallCart cart = cartService.findById(cartId);
             checkedGoodsList = new ArrayList<>(1);
             checkedGoodsList.add(cart);
