@@ -5,6 +5,7 @@ import com.github.binarywang.wxpay.bean.notify.WxPayOrderNotifyResult;
 import com.github.binarywang.wxpay.bean.order.WxPayMpOrderResult;
 import com.github.binarywang.wxpay.bean.request.WxPayUnifiedOrderRequest;
 import com.github.binarywang.wxpay.bean.result.BaseWxPayResult;
+import com.github.binarywang.wxpay.constant.WxPayConstants;
 import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
 import com.github.pagehelper.PageInfo;
@@ -105,17 +106,6 @@ public class WxOrderService {
     @Autowired
     private CouponVerifyService couponVerifyService;
 
-    private String detailedAddress(LitemallAddress litemallAddress) {
-        Integer provinceId = litemallAddress.getProvinceId();
-        Integer cityId = litemallAddress.getCityId();
-        Integer areaId = litemallAddress.getAreaId();
-        String provinceName = regionService.findById(provinceId).getName();
-        String cityName = regionService.findById(cityId).getName();
-        String areaName = regionService.findById(areaId).getName();
-        String fullRegion = provinceName + " " + cityName + " " + areaName;
-        return fullRegion + " " + litemallAddress.getAddress();
-    }
-
     /**
      * 订单列表
      *
@@ -164,6 +154,7 @@ public class WxOrderService {
                 orderGoodsVo.put("goodsName", orderGoods.getGoodsName());
                 orderGoodsVo.put("number", orderGoods.getNumber());
                 orderGoodsVo.put("picUrl", orderGoods.getPicUrl());
+                orderGoodsVo.put("specifications", orderGoods.getSpecifications());
                 orderGoodsVoList.add(orderGoodsVo);
             }
             orderVo.put("goodsList", orderGoodsVoList);
@@ -278,7 +269,7 @@ public class WxOrderService {
         }
 
         // 收货地址
-        LitemallAddress checkedAddress = addressService.findById(addressId);
+        LitemallAddress checkedAddress = addressService.query(userId, addressId);
         if (checkedAddress == null) {
             return ResponseUtil.badArgument();
         }
@@ -347,9 +338,9 @@ public class WxOrderService {
         order.setOrderSn(orderService.generateOrderSn(userId));
         order.setOrderStatus(OrderUtil.STATUS_CREATE);
         order.setConsignee(checkedAddress.getName());
-        order.setMobile(checkedAddress.getMobile());
+        order.setMobile(checkedAddress.getTel());
         order.setMessage(message);
-        String detailedAddress = detailedAddress(checkedAddress);
+        String detailedAddress = checkedAddress.getProvince() + checkedAddress.getCity() + checkedAddress.getCounty() + " " + checkedAddress.getAddressDetail();
         order.setAddress(detailedAddress);
         order.setGoodsPrice(checkedGoodsPrice);
         order.setFreightPrice(freightPrice);
@@ -601,6 +592,15 @@ public class WxOrderService {
         WxPayOrderNotifyResult result = null;
         try {
             result = wxPayService.parseOrderNotifyResult(xmlResult);
+
+            if(!WxPayConstants.ResultCode.SUCCESS.equals(result.getResultCode())){
+                logger.error(xmlResult);
+                throw new WxPayException("微信通知支付失败！");
+            }
+            if(!WxPayConstants.ResultCode.SUCCESS.equals(result.getReturnCode())){
+                logger.error(xmlResult);
+                throw new WxPayException("微信通知支付失败！");
+            }
         } catch (WxPayException e) {
             e.printStackTrace();
             return WxPayNotifyResponse.fail(e.getMessage());
