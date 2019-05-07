@@ -3,6 +3,7 @@ package org.linlinjava.litemall.db.service;
 import org.linlinjava.litemall.db.domain.LitemallSeckillRules;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 秒杀规则模块.
@@ -46,6 +47,20 @@ public interface LitemallSeckillRulesService {
      * @return
      */
     LitemallSeckillRules queryById(Integer id);
+
+    /**
+     * 根据id查询有效的秒杀规则信息.
+     * @param id
+     * @return
+     */
+    boolean deleteById(Integer id);
+
+    /**
+     * 根据id查询有效的秒杀规则信息.
+     * @param id
+     * @return
+     */
+    Map seckillRuleDetail(Integer id);
 
 
 }

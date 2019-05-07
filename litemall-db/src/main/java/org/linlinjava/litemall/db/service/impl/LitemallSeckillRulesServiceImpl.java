@@ -14,6 +14,7 @@ import org.springframework.util.StringUtils;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 秒杀服务.
@@ -87,5 +88,19 @@ public class LitemallSeckillRulesServiceImpl implements LitemallSeckillRulesServ
         LitemallSeckillRulesExample example = new LitemallSeckillRulesExample();
         example.or().andIdEqualTo(id).andDeletedEqualTo(false);
         return litemallSeckillRulesMapper.selectOneByExample(example);
+    }
+
+    @Override
+    public boolean deleteById(Integer id) {
+        int result = litemallSeckillRulesMapper.deleteByPrimaryKey(id);
+        if (result == 1) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public Map seckillRuleDetail(Integer id) {
+        return null;
     }
 }
