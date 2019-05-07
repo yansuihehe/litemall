@@ -60,8 +60,8 @@ public class AdminWithdrawController {
     @GetMapping("/list")
     public Object list(@RequestParam(defaultValue = "1") Integer page,
                        @RequestParam(defaultValue = "10") Integer limit,
-                       Byte status, String openid){
-        List<LitemallWithdrawApply> applyList = withdrawApplyService.query(page, limit, status, openid);
+                       Byte status, String openid, Integer userId){
+        List<LitemallWithdrawApply> applyList = withdrawApplyService.query(page, limit, status, openid, userId);
         long total = PageInfo.of(applyList).getTotal();
         Map<String, Object> data = new HashMap<>();
         data.put("total", total);

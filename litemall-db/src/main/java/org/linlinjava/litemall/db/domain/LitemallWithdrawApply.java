@@ -1,5 +1,7 @@
 package org.linlinjava.litemall.db.domain;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -38,6 +40,7 @@ public class LitemallWithdrawApply {
      *
      * @mbg.generated
      */
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String openId;
 
     /**
