@@ -190,6 +190,47 @@ public class WxOrderService {
     }
 
     /**
+     * 用户查看佣金来源订单时的数据结构转换
+     * @param orderList
+     * @return
+     */
+    private List<Map<String, Object>> convertOrderForCommission(List<LitemallOrder> orderList){
+        List<Map<String, Object>> orderVoList = new ArrayList<>(orderList.size());
+        for (LitemallOrder order : orderList) {
+            Map<String, Object> orderVo = new HashMap<>();
+            orderVo.put("id", order.getId());
+            orderVo.put("orderSn", order.getOrderSn());
+            orderVo.put("actualPrice", order.getActualPrice());
+            orderVo.put("commission", order.getCommission());
+            orderVo.put("orderStatusText", OrderUtil.orderStatusText(order));
+
+            LitemallGroupon groupon = grouponService.queryByOrderId(order.getId());
+            if (groupon != null) {
+                orderVo.put("isGroupin", true);
+            } else {
+                orderVo.put("isGroupin", false);
+            }
+
+            List<LitemallOrderGoods> orderGoodsList = orderGoodsService.queryByOid(order.getId());
+            List<Map<String, Object>> orderGoodsVoList = new ArrayList<>(orderGoodsList.size());
+            for (LitemallOrderGoods orderGoods : orderGoodsList) {
+                Map<String, Object> orderGoodsVo = new HashMap<>();
+                orderGoodsVo.put("id", orderGoods.getId());
+                orderGoodsVo.put("goodsName", orderGoods.getGoodsName());
+                orderGoodsVo.put("number", orderGoods.getNumber());
+                orderGoodsVo.put("picUrl", orderGoods.getPicUrl());
+                orderGoodsVo.put("specifications", orderGoods.getSpecifications());
+                orderGoodsVo.put("commission", orderGoods.getCommission());
+                orderGoodsVoList.add(orderGoodsVo);
+            }
+            orderVo.put("goodsList", orderGoodsVoList);
+
+            orderVoList.add(orderVo);
+        }
+        return orderVoList;
+    }
+
+    /**
      * 订单详情
      *
      * @param userId  用户ID
@@ -991,7 +1032,7 @@ public class WxOrderService {
 
         Map<String, Object> result = new HashMap<>();
         result.put("count", count);
-        result.put("data", convertOrder(orderList));
+        result.put("data", convertOrderForCommission(orderList));
         result.put("totalPages", totalPages);
         return ResponseUtil.ok(result);
     }
