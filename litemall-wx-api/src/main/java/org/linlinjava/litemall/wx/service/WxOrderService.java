@@ -259,9 +259,10 @@ public class WxOrderService {
      * 3. 优惠券设置已用;
      * 4. 商品货品库存减少;
      * 5. 如果是团购商品，则创建团购活动表项。
+     * 6. 如果为秒杀商品，则创建秒杀表项。
      *
      * @param userId 用户ID
-     * @param body   订单信息，{ cartId：xxx, addressId: xxx, couponId: xxx, message: xxx, grouponRulesId: xxx,  grouponLinkId: xxx}
+     * @param body   订单信息，{ cartId：xxx, addressId: xxx, couponId: xxx, message: xxx, grouponRulesId: xxx,  grouponLinkId: xxx, seckillRulesId: xxx}
      * @return 提交订单操作结果
      */
     @Transactional

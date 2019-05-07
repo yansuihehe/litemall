@@ -10,6 +10,7 @@ import org.linlinjava.litemall.db.service.LitemallSeckillRulesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -70,10 +71,36 @@ public class AdminSeckillRulesController {
      * @return
      */
     @RequiresPermissions("admin:seckill:rules:update")
-    @RequiresPermissionsDesc(menu={"推广管理" , "秒杀规则"}, button="更新")
+    @RequiresPermissionsDesc(menu={"推广管理" , "秒杀规则"}, button="编辑")
     @PostMapping(value = "/update")
     public Object updateSecKillRulesList(@RequestBody LitemallSeckillRules rules) {
         litemallSeckillRulesService.updateSecKillRules(rules);
+        return ResponseUtil.ok();
+    }
+
+    /**
+     * 删除秒杀规则.
+     * @param rules
+     * @return
+     */
+    @RequiresPermissions("admin:seckill:rules:delete")
+    @RequiresPermissionsDesc(menu={"推广管理" , "秒杀规则"}, button="删除")
+    @PostMapping(value = "/delete")
+    public Object deleteSecKillRulesList(@RequestBody LitemallSeckillRules rules) {
+        litemallSeckillRulesService.deleteById(rules.getId());
+        return ResponseUtil.ok();
+    }
+
+    /**
+     * 获取秒杀规则详情.
+     * @param ruleId    描述规则id
+     * @return
+     */
+    @RequiresPermissions("admin:seckill:rules:detail")
+    @RequiresPermissionsDesc(menu={"推广管理" , "秒杀规则"}, button="详情")
+    @GetMapping(value = "/detail/{ruleId}")
+    public Object secKillRulesDetail(@PathVariable(value = "ruleId") int ruleId) {
+        litemallSeckillRulesService.deleteById(ruleId);
         return ResponseUtil.ok();
     }
 
