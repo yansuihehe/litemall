@@ -38,7 +38,7 @@ public class WxWithdrawApplyController {
      * 用户提交申请
      *
      * @param userId  用户id
-     * @param amount  提现金额
+     * @param amount 提现金额
      * @param channel 提现渠道 默认微信 1
      * @return
      */
@@ -49,9 +49,11 @@ public class WxWithdrawApplyController {
         }
         BigDecimal amount = new BigDecimal(JacksonUtil.parseString(body, "amount"));
         Byte channel = JacksonUtil.parseByte(body, "channel");
-        //校验用户账户佣金额度是否大于提现金额
+        //校验用户账户佣金额度是否大于提现金额  同时查询审核中的金额
+        BigDecimal pendingAmount = withdrawApplyService.queryPendingAmount(userId);
+        BigDecimal willWithdrawAmount = pendingAmount.add(amount);
         LitemallUser user = userService.findById(userId);
-        if (amount != null && user.getCommissionAmount().compareTo(amount) == -1) {
+        if (amount != null && user.getCommissionAmount().compareTo(willWithdrawAmount) == -1) {
             return ResponseUtil.badArgumentValue();
         }
         String openid = user.getWeixinOpenid();

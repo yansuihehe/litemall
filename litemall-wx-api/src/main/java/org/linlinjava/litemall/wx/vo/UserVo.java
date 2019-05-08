@@ -1,6 +1,7 @@
 package org.linlinjava.litemall.wx.vo;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 
 /**
  * @author sunyan
@@ -14,13 +15,25 @@ public class UserVo {
     private BigDecimal commissionAmount;
 
     /**
-     * 提现金额
+     * 已提现金额
      */
     private BigDecimal withdrawAmount;
 
-    public UserVo(BigDecimal commissionAmount, BigDecimal withdrawAmount) {
-        this.commissionAmount = commissionAmount;
-        this.withdrawAmount = withdrawAmount;
+    /**
+     * 提现中金额（审核中）
+     */
+    private BigDecimal pendingWithdrawAmount;
+
+    /**
+     * 可提现金额 = 佣金金额 - 提现中金额
+     */
+    private BigDecimal allowWithdrawAmount;
+
+    public UserVo(BigDecimal commissionAmount, BigDecimal withdrawAmount, BigDecimal pendingWithdrawAmount) {
+        this.commissionAmount = Optional.ofNullable(commissionAmount).orElse(BigDecimal.ZERO);
+        this.withdrawAmount = Optional.ofNullable(withdrawAmount).orElse(BigDecimal.ZERO);
+        this.pendingWithdrawAmount = Optional.ofNullable(pendingWithdrawAmount).orElse(BigDecimal.ZERO);
+        this.allowWithdrawAmount = this.commissionAmount.subtract(this.pendingWithdrawAmount);
     }
 
     public BigDecimal getCommissionAmount() {
@@ -37,5 +50,21 @@ public class UserVo {
 
     public void setWithdrawAmount(BigDecimal withdrawAmount) {
         this.withdrawAmount = withdrawAmount;
+    }
+
+    public BigDecimal getPendingWithdrawAmount() {
+        return pendingWithdrawAmount;
+    }
+
+    public void setPendingWithdrawAmount(BigDecimal pendingWithdrawAmount) {
+        this.pendingWithdrawAmount = pendingWithdrawAmount;
+    }
+
+    public BigDecimal getAllowWithdrawAmount() {
+        return allowWithdrawAmount;
+    }
+
+    public void setAllowWithdrawAmount(BigDecimal allowWithdrawAmount) {
+        this.allowWithdrawAmount = allowWithdrawAmount;
     }
 }
