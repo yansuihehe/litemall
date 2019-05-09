@@ -26,12 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 import static org.linlinjava.litemall.admin.util.AdminResponseCode.GOODS_NAME_EXIST;
 
@@ -348,7 +343,7 @@ public class AdminGoodsService {
         if(products == null || products.length == 0){
             return BigDecimal.ZERO;
         }
-        Optional<BigDecimal> maxCommission = Arrays.stream(products).map(LitemallGoodsProduct::getCommission).reduce(BigDecimal::max);
+        Optional<BigDecimal> maxCommission = Arrays.stream(products).map(LitemallGoodsProduct::getCommission).filter(Objects::nonNull).reduce(BigDecimal::max);
         if(maxCommission.isPresent()){
             return maxCommission.get();
         }
@@ -364,11 +359,11 @@ public class AdminGoodsService {
         if(products == null || products.length == 0){
             return BigDecimal.ZERO;
         }
-        Optional<BigDecimal> minMemberPrice = Arrays.stream(products).map(LitemallGoodsProduct::getMemberPrice).reduce(BigDecimal::min);
+        Optional<BigDecimal> minMemberPrice = Arrays.stream(products).map(LitemallGoodsProduct::getMemberPrice).filter(Objects::nonNull).reduce(BigDecimal::min);
         if(minMemberPrice.isPresent()){
             return minMemberPrice.get();
         }
-        return BigDecimal.ZERO;
+        return null;
     }
 
 }
