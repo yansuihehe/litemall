@@ -8,7 +8,6 @@ import com.github.binarywang.wxpay.bean.result.BaseWxPayResult;
 import com.github.binarywang.wxpay.constant.WxPayConstants;
 import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
-import com.github.pagehelper.PageInfo;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -131,47 +130,31 @@ public class WxOrderService {
      * @param limit     分页大小
      * @return 订单列表
      */
-    public Object list(Integer userId, Integer showType, Integer page, Integer limit) {
+    public Object list(Integer userId, Integer showType, Integer page, Integer limit, String sort, String order) {
         if (userId == null) {
             return ResponseUtil.unlogin();
         }
 
         List<Short> orderStatus = OrderUtil.orderStatus(showType);
-        List<LitemallOrder> orderList = orderService.queryByOrderStatus(userId, orderStatus, page, limit);
-        long count = PageInfo.of(orderList).getTotal();
-        int totalPages = (int) Math.ceil((double) count / limit);
+        List<LitemallOrder> orderList = orderService.queryByOrderStatus(userId, orderStatus, page, limit, sort, order);
 
-        Map<String, Object> result = new HashMap<>();
-        result.put("count", count);
-        result.put("data", convertOrder(orderList));
-        result.put("totalPages", totalPages);
-
-        return ResponseUtil.ok(result);
-    }
-
-    /**
-     * 订单数据结构转换 用于返回微信端
-     * @param orderList
-     * @return
-     */
-    private List<Map<String, Object>> convertOrder(List<LitemallOrder> orderList){
         List<Map<String, Object>> orderVoList = new ArrayList<>(orderList.size());
-        for (LitemallOrder order : orderList) {
+        for (LitemallOrder o : orderList) {
             Map<String, Object> orderVo = new HashMap<>();
-            orderVo.put("id", order.getId());
-            orderVo.put("orderSn", order.getOrderSn());
-            orderVo.put("actualPrice", order.getActualPrice());
-            orderVo.put("orderStatusText", OrderUtil.orderStatusText(order));
-            orderVo.put("handleOption", OrderUtil.build(order));
+            orderVo.put("id", o.getId());
+            orderVo.put("orderSn", o.getOrderSn());
+            orderVo.put("actualPrice", o.getActualPrice());
+            orderVo.put("orderStatusText", OrderUtil.orderStatusText(o));
+            orderVo.put("handleOption", OrderUtil.build(o));
 
-            LitemallGroupon groupon = grouponService.queryByOrderId(order.getId());
+            LitemallGroupon groupon = grouponService.queryByOrderId(o.getId());
             if (groupon != null) {
                 orderVo.put("isGroupin", true);
             } else {
                 orderVo.put("isGroupin", false);
             }
 
-            List<LitemallOrderGoods> orderGoodsList = orderGoodsService.queryByOid(order.getId());
+            List<LitemallOrderGoods> orderGoodsList = orderGoodsService.queryByOid(o.getId());
             List<Map<String, Object>> orderGoodsVoList = new ArrayList<>(orderGoodsList.size());
             for (LitemallOrderGoods orderGoods : orderGoodsList) {
                 Map<String, Object> orderGoodsVo = new HashMap<>();
@@ -186,48 +169,8 @@ public class WxOrderService {
 
             orderVoList.add(orderVo);
         }
-        return orderVoList;
-    }
 
-    /**
-     * 用户查看佣金来源订单时的数据结构转换
-     * @param orderList
-     * @return
-     */
-    private List<Map<String, Object>> convertOrderForCommission(List<LitemallOrder> orderList){
-        List<Map<String, Object>> orderVoList = new ArrayList<>(orderList.size());
-        for (LitemallOrder order : orderList) {
-            Map<String, Object> orderVo = new HashMap<>();
-            orderVo.put("id", order.getId());
-            orderVo.put("orderSn", order.getOrderSn());
-            orderVo.put("actualPrice", order.getActualPrice());
-            orderVo.put("commission", order.getCommission());
-            orderVo.put("orderStatusText", OrderUtil.orderStatusText(order));
-
-            LitemallGroupon groupon = grouponService.queryByOrderId(order.getId());
-            if (groupon != null) {
-                orderVo.put("isGroupin", true);
-            } else {
-                orderVo.put("isGroupin", false);
-            }
-
-            List<LitemallOrderGoods> orderGoodsList = orderGoodsService.queryByOid(order.getId());
-            List<Map<String, Object>> orderGoodsVoList = new ArrayList<>(orderGoodsList.size());
-            for (LitemallOrderGoods orderGoods : orderGoodsList) {
-                Map<String, Object> orderGoodsVo = new HashMap<>();
-                orderGoodsVo.put("id", orderGoods.getId());
-                orderGoodsVo.put("goodsName", orderGoods.getGoodsName());
-                orderGoodsVo.put("number", orderGoods.getNumber());
-                orderGoodsVo.put("picUrl", orderGoods.getPicUrl());
-                orderGoodsVo.put("specifications", orderGoods.getSpecifications());
-                orderGoodsVo.put("commission", orderGoods.getCommission());
-                orderGoodsVoList.add(orderGoodsVo);
-            }
-            orderVo.put("goodsList", orderGoodsVoList);
-
-            orderVoList.add(orderVo);
-        }
-        return orderVoList;
+        return ResponseUtil.okList(orderVoList, orderList);
     }
 
     /**
@@ -1028,14 +971,49 @@ public class WxOrderService {
             return ResponseUtil.unlogin();
         }
         List<LitemallOrder> orderList = orderService.queryOrderBySuperior(page, limit, userId);
-        long count = PageInfo.of(orderList).getTotal();
-        int totalPages = (int) Math.ceil((double) count / limit);
+        List<Map<String, Object>> resultList = convertOrderForCommission(orderList);
+        return ResponseUtil.okList(resultList, orderList);
+    }
 
-        Map<String, Object> result = new HashMap<>();
-        result.put("count", count);
-        result.put("data", convertOrderForCommission(orderList));
-        result.put("totalPages", totalPages);
-        return ResponseUtil.ok(result);
+    /**
+     * 用户查看佣金来源订单时的数据结构转换
+     * @param orderList
+     * @return
+     */
+    private List<Map<String, Object>> convertOrderForCommission(List<LitemallOrder> orderList){
+        List<Map<String, Object>> orderVoList = new ArrayList<>(orderList.size());
+        for (LitemallOrder order : orderList) {
+            Map<String, Object> orderVo = new HashMap<>();
+            orderVo.put("id", order.getId());
+            orderVo.put("orderSn", order.getOrderSn());
+            orderVo.put("actualPrice", order.getActualPrice());
+            orderVo.put("commission", order.getCommission());
+            orderVo.put("orderStatusText", OrderUtil.orderStatusText(order));
+
+            LitemallGroupon groupon = grouponService.queryByOrderId(order.getId());
+            if (groupon != null) {
+                orderVo.put("isGroupin", true);
+            } else {
+                orderVo.put("isGroupin", false);
+            }
+
+            List<LitemallOrderGoods> orderGoodsList = orderGoodsService.queryByOid(order.getId());
+            List<Map<String, Object>> orderGoodsVoList = new ArrayList<>(orderGoodsList.size());
+            for (LitemallOrderGoods orderGoods : orderGoodsList) {
+                Map<String, Object> orderGoodsVo = new HashMap<>();
+                orderGoodsVo.put("id", orderGoods.getId());
+                orderGoodsVo.put("goodsName", orderGoods.getGoodsName());
+                orderGoodsVo.put("number", orderGoods.getNumber());
+                orderGoodsVo.put("picUrl", orderGoods.getPicUrl());
+                orderGoodsVo.put("specifications", orderGoods.getSpecifications());
+                orderGoodsVo.put("commission", orderGoods.getCommission());
+                orderGoodsVoList.add(orderGoodsVo);
+            }
+            orderVo.put("goodsList", orderGoodsVoList);
+
+            orderVoList.add(orderVo);
+        }
+        return orderVoList;
     }
 
 }

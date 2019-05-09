@@ -29,7 +29,7 @@ public class AdminRegionController {
     @GetMapping("/clist")
     public Object clist(@NotNull Integer id) {
         List<LitemallRegion> regionList = regionService.queryByPid(id);
-        return ResponseUtil.ok(regionList);
+        return ResponseUtil.okList(regionList);
     }
 
     @GetMapping("/list")
@@ -90,6 +90,6 @@ public class AdminRegionController {
             }
         }
         result.add(province);
-        return ResponseUtil.ok(result);
+        return ResponseUtil.okList(result);
     }
 }
