@@ -318,8 +318,8 @@ public class WxOrderService {
             if (grouponRules != null && grouponRules.getGoodsId().equals(checkGoods.getGoodsId())) {
                 checkedGoodsPrice = checkedGoodsPrice.add(checkGoods.getPrice().subtract(grouponPrice).multiply(new BigDecimal(checkGoods.getNumber())));
             } else if (seckillRulesId != null && litemallSeckillRules.getGoodsId().equals(checkGoods.getGoodsId())) {
-                // 如果为秒杀商品，价格=(货品价格-秒杀优惠金额)*商品数量
-                checkedGoodsPrice = checkedGoodsPrice.add(checkGoods.getPrice().subtract(litemallSeckillRules.getDiscount().multiply(new BigDecimal(checkGoods.getNumber()))));
+                // 如果为秒杀商品，价格=秒杀价 * 商品数量
+                checkedGoodsPrice = checkedGoodsPrice.add(litemallSeckillRules.getSeckillPrice().multiply(new BigDecimal(checkGoods.getNumber())));
 
             } else {
                 //TODO 如果为会员，则为会员价
