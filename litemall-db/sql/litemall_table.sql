@@ -798,3 +798,21 @@ CREATE TABLE `litemall_withdraw_apply` (
   `update_time` datetime DEFAULT NULL COMMENT '管理员操作时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+DROP TABLE IF EXISTS `litemall_seckill_rules`;
+CREATE TABLE `litemall_seckill_rules` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `goods_id` int(11) NOT NULL COMMENT '商品表的商品ID',
+  `goods_name` varchar(127) NOT NULL COMMENT '商品名称',
+  `product_id` int(11) DEFAULT NULL COMMENT '商品货品表的货品ID',
+  `pic_url` varchar(255) DEFAULT NULL COMMENT '商品图片或者商品货品图片',
+  `seckill_price` decimal(16,2) NOT NULL COMMENT '秒杀一口价',
+  `seckill_number` int(11) NOT NULL COMMENT '参与秒杀商品总数量',
+  `remaining_number` int(11) DEFAULT NULL COMMENT '参与秒杀商品剩余数量',
+  `begin_time` datetime DEFAULT NULL COMMENT '秒杀起始时间',
+  `expire_time` datetime DEFAULT NULL COMMENT '秒杀过期时间',
+  `add_time` datetime NOT NULL COMMENT '创建时间',
+  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+  `deleted` tinyint(1) DEFAULT '0' COMMENT '逻辑删除',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
