@@ -91,6 +91,13 @@ public class LitemallSeckillRulesServiceImpl implements LitemallSeckillRulesServ
     }
 
     @Override
+    public List<LitemallSeckillRules> queryByGoodId(Integer goodId) {
+        LitemallSeckillRulesExample example = new LitemallSeckillRulesExample();
+        example.or().andGoodsIdEqualTo(goodId).andDeletedEqualTo(false);
+        return litemallSeckillRulesMapper.selectByExample(example);
+    }
+
+    @Override
     public boolean deleteById(Integer id) {
         int result = litemallSeckillRulesMapper.deleteByPrimaryKey(id);
         if (result == 1) {

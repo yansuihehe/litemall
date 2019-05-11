@@ -273,7 +273,7 @@ public class WxOrderService {
         // 如果是秒杀项目，验证有效性
         LitemallSeckillRules litemallSeckillRules = null;
         if (seckillRulesId != null && seckillRulesId > 0) {
-            litemallSeckillRules = litemallSeckillRulesService.queryById(seckillId);
+            litemallSeckillRules = litemallSeckillRulesService.queryById(seckillRulesId);
             if (litemallSeckillRules == null) {
                 return ResponseUtil.badArgument();
             }

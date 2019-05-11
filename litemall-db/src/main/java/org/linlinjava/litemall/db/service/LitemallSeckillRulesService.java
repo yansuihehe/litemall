@@ -49,6 +49,14 @@ public interface LitemallSeckillRulesService {
     LitemallSeckillRules queryById(Integer id);
 
     /**
+     * 根据商品id查询有效的秒杀规则信息.
+     * @param goodId
+     * @return
+     */
+    List<LitemallSeckillRules> queryByGoodId(Integer goodId);
+
+
+    /**
      * 根据id查询有效的秒杀规则信息.
      * @param id
      * @return

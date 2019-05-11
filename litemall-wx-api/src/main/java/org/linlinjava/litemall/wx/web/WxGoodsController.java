@@ -13,6 +13,7 @@ import org.linlinjava.litemall.db.domain.LitemallComment;
 import org.linlinjava.litemall.db.domain.LitemallFootprint;
 import org.linlinjava.litemall.db.domain.LitemallGoods;
 import org.linlinjava.litemall.db.domain.LitemallSearchHistory;
+import org.linlinjava.litemall.db.domain.LitemallSeckillRules;
 import org.linlinjava.litemall.db.domain.LitemallUser;
 import org.linlinjava.litemall.db.service.LitemallBrandService;
 import org.linlinjava.litemall.db.service.LitemallCategoryService;
@@ -26,9 +27,11 @@ import org.linlinjava.litemall.db.service.LitemallGoodsSpecificationService;
 import org.linlinjava.litemall.db.service.LitemallGrouponRulesService;
 import org.linlinjava.litemall.db.service.LitemallIssueService;
 import org.linlinjava.litemall.db.service.LitemallSearchHistoryService;
+import org.linlinjava.litemall.db.service.LitemallSeckillRulesService;
 import org.linlinjava.litemall.db.service.LitemallUserService;
 import org.linlinjava.litemall.wx.annotation.LoginUser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -42,6 +45,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.Callable;
+import java.util.concurrent.Future;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.RejectedExecutionHandler;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -94,6 +98,9 @@ public class WxGoodsController {
 
 	@Autowired
 	private LitemallGrouponRulesService rulesService;
+
+	@Autowired
+	private LitemallSeckillRulesService litemallSeckillRulesService;
 
 	private final static ArrayBlockingQueue<Runnable> WORK_QUEUE = new ArrayBlockingQueue<>(9);
 
@@ -162,8 +169,10 @@ public class WxGoodsController {
 			return commentList;
 		};
 
-		//团购信息
+		// 团购信息
 		Callable<List> grouponRulesCallable = () ->rulesService.queryByGoodsId(id);
+		// 秒杀信息
+		Callable<List> seckillRulesCallable = () ->litemallSeckillRulesService.queryByGoodId(id);
 
 		// 用户收藏
 		int userHasCollect = 0;
@@ -187,6 +196,7 @@ public class WxGoodsController {
 		FutureTask<Map> commentsCallableTsk = new FutureTask<>(commentsCallable);
 		FutureTask<LitemallBrand> brandCallableTask = new FutureTask<>(brandCallable);
         FutureTask<List> grouponRulesCallableTask = new FutureTask<>(grouponRulesCallable);
+		FutureTask<List> litemallSeckillRulesFutureTask = new FutureTask<>(seckillRulesCallable);
 
 		executorService.submit(goodsAttributeListTask);
 		executorService.submit(objectCallableTask);
@@ -195,6 +205,7 @@ public class WxGoodsController {
 		executorService.submit(commentsCallableTsk);
 		executorService.submit(brandCallableTask);
 		executorService.submit(grouponRulesCallableTask);
+		executorService.submit(litemallSeckillRulesFutureTask);
 
 		Map<String, Object> data = new HashMap<>();
 
@@ -208,6 +219,7 @@ public class WxGoodsController {
 			data.put("attribute", goodsAttributeListTask.get());
 			data.put("brand", brandCallableTask.get());
 			data.put("groupon", grouponRulesCallableTask.get());
+			data.put("seckill", litemallSeckillRulesFutureTask.get());
 		}
 		catch (Exception e) {
 			e.printStackTrace();
