@@ -352,6 +352,16 @@ export const asyncRouterMap = [
         }
       },
       {
+        path: 'seckill-rule',
+        component: () => import('@/views/promotion/seckillRule'),
+        name: 'seckillRule',
+        meta: {
+          perms: ['GET /admin/seckill/rules/list', 'POST /admin/seckill/rules/create', 'POST /admin/seckill/rules/update', 'POST /admin/seckill/rules/delete'],
+          title: '秒杀活动',
+          noCache: true
+        }
+      },
+      {
         path: 'withdraw-apply',
         component: () => import('@/views/promotion/withdraw'),
         name: 'withdraw-apply',

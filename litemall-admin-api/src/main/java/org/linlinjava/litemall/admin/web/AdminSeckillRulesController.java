@@ -49,7 +49,7 @@ public class AdminSeckillRulesController {
             @Sort @RequestParam(defaultValue = "add_time") String sort,
             @Order @RequestParam(defaultValue = "desc") String order) {
         List<LitemallSeckillRules> list = litemallSeckillRulesService.getSecKillRulesList(page, limit, sort, order);
-        return ResponseUtil.ok(list);
+        return ResponseUtil.okList(list);
     }
 
     /**

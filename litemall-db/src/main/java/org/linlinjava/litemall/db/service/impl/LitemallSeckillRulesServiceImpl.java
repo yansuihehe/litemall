@@ -1,9 +1,14 @@
 package org.linlinjava.litemall.db.service.impl;
 
 import com.github.pagehelper.PageHelper;
+import org.checkerframework.checker.units.qual.A;
 import org.linlinjava.litemall.db.dao.LitemallSeckillRulesMapper;
+import org.linlinjava.litemall.db.domain.LitemallGoods;
+import org.linlinjava.litemall.db.domain.LitemallGoodsProduct;
 import org.linlinjava.litemall.db.domain.LitemallSeckillRules;
 import org.linlinjava.litemall.db.domain.LitemallSeckillRulesExample;
+import org.linlinjava.litemall.db.service.LitemallGoodsProductService;
+import org.linlinjava.litemall.db.service.LitemallGoodsService;
 import org.linlinjava.litemall.db.service.LitemallSeckillRulesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,6 +32,12 @@ public class LitemallSeckillRulesServiceImpl implements LitemallSeckillRulesServ
     @Autowired
     private LitemallSeckillRulesMapper litemallSeckillRulesMapper;
 
+    @Autowired
+    private LitemallGoodsService litemallGoodsService;
+
+    @Autowired
+    private LitemallGoodsProductService litemallGoodsProductService;
+
     @Override
     public List<LitemallSeckillRules> getSecKillRulesList(Integer page, Integer limit, String sort, String order) {
         LitemallSeckillRulesExample example = new LitemallSeckillRulesExample();
@@ -42,28 +53,21 @@ public class LitemallSeckillRulesServiceImpl implements LitemallSeckillRulesServ
 
     @Override
     public void saveSecKillRules(LitemallSeckillRules litemallSeckillRules) {
-        try {
-            litemallSeckillRules.setAddTime(LocalDateTime.now());
-            litemallSeckillRules.setUpdateTime(LocalDateTime.now());
-            litemallSeckillRules.setDeleted(false);
-            litemallSeckillRulesMapper.insert(litemallSeckillRules);
-        } catch (Exception e) {
-            throw new RuntimeException("保存秒杀规则失败");
-        }
+        LitemallGoods litemallGoods = litemallGoodsService.findById(litemallSeckillRules.getGoodsId());
+        litemallSeckillRules.setGoodsName(litemallGoods.getName());
+        LitemallGoodsProduct litemallGoodsProduct = litemallGoodsProductService.findById(litemallSeckillRules.getProductId());
+        litemallSeckillRules.setPicUrl(litemallGoodsProduct.getUrl());
+        litemallSeckillRules.setAddTime(LocalDateTime.now());
+        litemallSeckillRules.setUpdateTime(LocalDateTime.now());
+        litemallSeckillRules.setDeleted(false);
+        litemallSeckillRulesMapper.insert(litemallSeckillRules);
     }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public void updateSecKillRules(LitemallSeckillRules litemallSeckillRules) {
-
-        try {
-            litemallSeckillRules.setUpdateTime(LocalDateTime.now());
-            litemallSeckillRulesMapper.updateByPrimaryKey(litemallSeckillRules);
-        } catch (Exception e) {
-            throw new RuntimeException("更新秒杀规则失败");
-        }
-
-
+        litemallSeckillRules.setUpdateTime(LocalDateTime.now());
+        litemallSeckillRulesMapper.updateByPrimaryKey(litemallSeckillRules);
     }
 
     @Override
@@ -78,6 +82,7 @@ public class LitemallSeckillRulesServiceImpl implements LitemallSeckillRulesServ
             if (result == 1)
                 return true;
         } catch (Exception e) {
+            e.printStackTrace();
             throw new RuntimeException("秒杀失败,系统异常");
         }
         return false;
