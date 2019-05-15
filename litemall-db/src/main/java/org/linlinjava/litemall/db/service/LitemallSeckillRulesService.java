@@ -20,7 +20,7 @@ public interface LitemallSeckillRulesService {
      * @param order     desc or esc
      * @return
      */
-    List<LitemallSeckillRules> getSecKillRulesList(Integer page, Integer limit, String sort, String order);
+    List<LitemallSeckillRules> getSecKillRulesList(Integer page, Integer limit, String sort, String order, String query);
 
     /**
      * 保存秒杀规则.

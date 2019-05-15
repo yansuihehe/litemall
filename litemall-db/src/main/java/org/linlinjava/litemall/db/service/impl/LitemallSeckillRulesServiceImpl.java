@@ -20,6 +20,7 @@ import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 /**
  * 秒杀服务.
@@ -39,10 +40,21 @@ public class LitemallSeckillRulesServiceImpl implements LitemallSeckillRulesServ
     private LitemallGoodsProductService litemallGoodsProductService;
 
     @Override
-    public List<LitemallSeckillRules> getSecKillRulesList(Integer page, Integer limit, String sort, String order) {
+    public List<LitemallSeckillRules> getSecKillRulesList(Integer page, Integer limit, String sort, String order, String query) {
         LitemallSeckillRulesExample example = new LitemallSeckillRulesExample();
         LitemallSeckillRulesExample.Criteria criteria = example.createCriteria();
         criteria.andDeletedEqualTo(false);
+        if (!StringUtils.isEmpty(query)) {
+            criteria.andGoodsNameLike("%" + query + "%");
+            Pattern pattern = Pattern.compile("[0-9]*");
+            if (pattern.matcher(query).matches()) {
+                example.or().andGoodsIdEqualTo(Integer.parseInt(query))
+                    .andDeletedEqualTo(false);
+                example.or().andProductIdEqualTo(Integer.parseInt(query))
+                    .andDeletedEqualTo(false);
+
+            }
+        }
         if (!StringUtils.isEmpty(sort) && !StringUtils.isEmpty(order)) {
             example.setOrderByClause(sort + " " + order);
         }
