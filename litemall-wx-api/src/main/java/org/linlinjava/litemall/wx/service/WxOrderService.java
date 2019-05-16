@@ -1016,4 +1016,103 @@ public class WxOrderService {
         return orderVoList;
     }
 
+    /**
+     * 模拟微信支付成功 融合prepay方法和payNotify方法逻辑
+     * @param userId
+     * @param body
+     * @param request
+     * @return
+     */
+    public Object mockPaySuccess(Integer userId, String body, HttpServletRequest request){
+
+        if (userId == null) {
+            return ResponseUtil.unlogin();
+        }
+        Integer orderId = JacksonUtil.parseInteger(body, "orderId");
+        if (orderId == null) {
+            return ResponseUtil.badArgument();
+        }
+
+        LitemallOrder order = orderService.findById(orderId);
+        if (order == null) {
+            return ResponseUtil.badArgumentValue();
+        }
+        if (!order.getUserId().equals(userId)) {
+            return ResponseUtil.badArgumentValue();
+        }
+
+        // 检测是否能够取消
+        OrderHandleOption handleOption = OrderUtil.build(order);
+        if (!handleOption.isPay()) {
+            return ResponseUtil.fail(ORDER_INVALID_OPERATION, "订单不能支付");
+        }
+
+        LitemallUser user = userService.findById(userId);
+        String openid = user.getWeixinOpenid();
+        if (openid == null) {
+            return ResponseUtil.fail(AUTH_OPENID_UNACCESS, "订单不能支付");
+        }
+        WxPayMpOrderResult result = null;
+
+        order.setPayId("mock");
+        order.setPayTime(LocalDateTime.now());
+        order.setOrderStatus(OrderUtil.STATUS_PAY);
+
+        if (orderService.updateWithOptimisticLocker(order) == 0) {
+            // 这里可能存在这样一个问题，用户支付和系统自动取消订单发生在同时
+            // 如果数据库首先因为系统自动取消订单而更新了订单状态；
+            // 此时用户支付完成回调这里也要更新数据库，而由于乐观锁机制这里的更新会失败
+            // 因此，这里会重新读取数据库检查状态是否是订单自动取消，如果是则更新成支付状态。
+            order = orderService.findBySn(order.getOrderSn());
+            int updated = 0;
+            if (OrderUtil.isAutoCancelStatus(order)) {
+                order.setPayId("mock");
+                order.setPayTime(LocalDateTime.now());
+                order.setOrderStatus(OrderUtil.STATUS_PAY);
+                updated = orderService.updateWithOptimisticLocker(order);
+            }
+
+            // 如果updated是0，那么数据库更新失败
+            if (updated == 0) {
+                return WxPayNotifyResponse.fail("更新数据已失效");
+            }
+        }
+
+        //  支付成功，有团购信息，更新团购信息
+        LitemallGroupon groupon = grouponService.queryByOrderId(order.getId());
+        if (groupon != null) {
+            LitemallGrouponRules grouponRules = grouponRulesService.queryById(groupon.getRulesId());
+
+            //仅当发起者才创建分享图片
+            if (groupon.getGrouponId() == 0) {
+                String url = qCodeService.createGrouponShareImage(grouponRules.getGoodsName(), grouponRules.getPicUrl(), groupon);
+                groupon.setShareUrl(url);
+            }
+            groupon.setPayed(true);
+            if (grouponService.updateById(groupon) == 0) {
+                return WxPayNotifyResponse.fail("更新数据已失效");
+            }
+        }
+
+        //TODO 发送邮件和短信通知，这里采用异步发送
+        // 订单支付成功以后，会发送短信给用户，以及发送邮件给管理员
+        notifyService.notifyMail("新订单通知", order.toString());
+        // 这里微信的短信平台对参数长度有限制，所以将订单号只截取后6位
+        notifyService.notifySmsTemplateSync(order.getMobile(), NotifyType.PAY_SUCCEED, new String[]{order.getOrderSn().substring(8, 14)});
+
+        // 请依据自己的模版消息配置更改参数
+        String[] parms = new String[]{
+                order.getOrderSn(),
+                order.getOrderPrice().toString(),
+                DateTimeUtil.getDateTimeDisplayString(order.getAddTime()),
+                order.getConsignee(),
+                order.getMobile(),
+                order.getAddress()
+        };
+
+        notifyService.notifyWxTemplate(user.getWeixinOpenid(), NotifyType.PAY_SUCCEED, parms, "pages/index/index?orderId=" + order.getId());
+
+        return ResponseUtil.ok();
+    }
+
 }

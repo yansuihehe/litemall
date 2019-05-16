@@ -145,7 +145,16 @@ Page({
         }
 
         const orderId = res.data.orderId;
-        util.request(api.OrderPrepay, {
+        //FIXME 此处临时修改支付一定成功，微信支付对接完再打开
+        util.request(api.OrderMockPay, {
+          orderId: orderId
+        }, 'POST').then(res => {
+          console.log("支付过程成功");
+          wx.redirectTo({
+            url: '/pages/payResult/payResult?status=1&orderId=' + orderId
+          });
+        })
+        /*util.request(api.OrderPrepay, {
           orderId: orderId
         }, 'POST').then(function(res) {
           if (res.errno === 0) {
@@ -178,7 +187,7 @@ Page({
               url: '/pages/payResult/payResult?status=0&orderId=' + orderId
             });
           }
-        });
+        });*/
 
       } else {
         wx.redirectTo({

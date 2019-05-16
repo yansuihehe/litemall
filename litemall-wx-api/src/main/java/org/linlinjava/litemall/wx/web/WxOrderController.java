@@ -180,4 +180,16 @@ public class WxOrderController {
         return wxOrderService.getCommissionSourceOrders(userId, page, limit);
     }
 
+    /**
+     * 模拟支付成功
+     * @param userId
+     * @param body
+     * @param request
+     * @return
+     */
+    @PostMapping("/pay/mock")
+    public Object payMock(@LoginUser Integer userId, @RequestBody String body, HttpServletRequest request){
+        return wxOrderService.mockPaySuccess(userId, body, request);
+    }
+
 }
