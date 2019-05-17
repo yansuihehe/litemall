@@ -88,7 +88,7 @@
       <el-table-column align="center" label="操作" width="200" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">编辑</el-button>
-          <el-button type="danger" size="mini" @click="handleDelete(scope.row)">删除</el-button>
+          <el-button type="danger" size="mini" @click="confirmDialog = true;deleteGoods = scope.row">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -98,6 +98,15 @@
     <el-tooltip placement="top" content="返回顶部">
       <back-to-top :visibility-height="100" />
     </el-tooltip>
+
+    <!-- 确认删除对话框 -->
+    <el-dialog :visible.sync="confirmDialog" title="删除商品">
+      <div style="text-align: center">确认删除此商品？</div>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="confirmDialog = false; deleteGoodsId = null">取消</el-button>
+        <el-button type="primary" @click="handleDelete">确定</el-button>
+      </div>
+    </el-dialog>
 
   </div>
 </template>
@@ -143,7 +152,9 @@ export default {
       },
       goodsDetail: '',
       detailDialogVisible: false,
-      downloadLoading: false
+      downloadLoading: false,
+      confirmDialog: false,
+      deleteGoods: null
     }
   },
   created() {
@@ -176,14 +187,16 @@ export default {
       this.goodsDetail = detail
       this.detailDialogVisible = true
     },
-    handleDelete(row) {
-      deleteGoods(row).then(response => {
+    handleDelete() {
+      deleteGoods(this.deleteGoods).then(response => {
         this.$notify.success({
           title: '成功',
           message: '删除成功'
         })
-        const index = this.list.indexOf(row)
+        const index = this.list.indexOf(this.deleteGoods)
         this.list.splice(index, 1)
+        this.deleteGoods = null
+        this.confirmDialog = false
       }).catch(response => {
         this.$notify.error({
           title: '失败',
