@@ -16,8 +16,10 @@
             <view class="subtitle">{{iitem.brief}}</view>
             <view class="price">
               <text>￥{{iitem.retailPrice}}</text>
-              <text class="slant">/</text>
-              <text class="commission">赚{{iitem.commission}}</text>
+              <text wx:if="{{iitem.commission > 0}}">
+                <text class="slant">/</text>
+                <text class="commission">赚{{iitem.commission}}</text>
+              </text>
             </view>
           </view>
         </view>

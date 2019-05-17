@@ -191,7 +191,7 @@ Page({
 
       } else {
         wx.redirectTo({
-          url: '/pages/payResult/payResult?status=0&orderId=' + orderId
+          url: '/pages/payResult/payResult?status=0&orderId=' + orderId //FIXME 下单失败没有orderId
         });
       }
     });

@@ -41,8 +41,10 @@
       <view class="price">
         <view class="counterPrice">原价：￥{{goods.counterPrice}}</view>
         <view class="retailPrice">现价：￥{{checkedSpecPrice}}</view>
-        <view class="slant">/</view>
-        <view class="commission">赚{{goods.commission}}</view>
+        <text wx:if="{{goods.commission > 0}}">
+          <view class="slant">/</view>
+          <view class="commission">赚{{goods.commission}}</view>
+        </text>
       </view>
 
       <view class="brand" wx:if="{{brand.name}}">
@@ -126,9 +128,11 @@
           <image class="img" src="{{item.picUrl}}" background-size="cover"></image>
           <text class="name">{{item.name}}</text>
           <view class="price">
-             <text>￥{{item.retailPrice}}</text>
-             <text class="slant">/</text>
-             <text class="commission">赚{{item.commission}}</text>
+            <text>￥{{item.retailPrice}}</text>
+            <text wx:if="{{item.commission > 0}}">
+              <text class="slant">/</text>
+              <text class="commission">赚{{item.commission}}</text>
+            </text>
            </view>
         </navigator>
       </view>

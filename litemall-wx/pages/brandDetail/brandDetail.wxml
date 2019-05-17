@@ -21,9 +21,11 @@
           <image class="img" src="{{iitem.picUrl}}" background-size="cover"></image>
           <text class="name">{{iitem.name}}</text>
           <view class="price">
-             <text>￥{{iitem.retailPrice}}</text>
-             <text class="slant">/</text>
-             <text class="commission">赚{{iitem.commission}}</text>
+            <text>￥{{iitem.retailPrice}}</text>
+            <text wx:if="{{iitem.commission > 0}}">
+              <text class="slant">/</text>
+              <text class="commission">赚{{iitem.commission}}</text>
+            </text>
            </view>
         </navigator>
       </block>

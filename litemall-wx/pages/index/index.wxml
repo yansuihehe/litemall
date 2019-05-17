@@ -75,8 +75,10 @@
               <view class="price">
                 <view class="counterPrice">现价：￥{{item.retailPrice}}</view>
                 <view class="retailPrice">团购价：￥{{item.grouponPrice}}</view>
-                <text class="slant">/</text>
-                <view class="commission">赚{{item.commission}}</view>
+                <text wx:if="{{item.commission > 0}}">
+                  <text class="slant">/</text>
+                  <view class="commission">赚{{item.commission}}</view>
+                </text>
               </view>
             </view>
           </view>
@@ -121,8 +123,10 @@
           <text class="name">{{item.name}}</text>
           <view class="price">
             <text>￥{{item.retailPrice}}</text>
-            <text class="slant">/</text>
-            <text class="commission">赚{{item.commission}}</text>
+            <text wx:if="{{item.commission > 0}}">
+              <text class="slant">/</text>
+              <text class="commission">赚{{item.commission}}</text>
+            </text>
           </view>
         </navigator>
       </view>
@@ -146,9 +150,11 @@
               <text class="name">{{item.name}}</text>
               <text class="desc">{{item.brief}}</text>
               <view class="price">
-                 <text>￥{{item.retailPrice}}</text>
-                 <text class="slant">/</text>
-                 <text class="commission">赚{{item.commission}}</text>
+                <text>￥{{item.retailPrice}}</text>
+                <text wx:if="{{item.commission > 0}}">
+                  <text class="slant">/</text>
+                  <text class="commission">赚{{item.commission}}</text>
+                </text>
                </view>
             </view>
           </view>
@@ -191,9 +197,11 @@
             <image class="img" src="{{iitem.picUrl}}" background-size="cover"></image>
             <text class="name">{{iitem.name}}</text>
             <view class="price">
-               <text>￥{{iitem.retailPrice}}</text>
-               <text class="slant">/</text>
-               <text class="commission">赚{{iitem.commission}}</text>
+              <text>￥{{iitem.retailPrice}}</text>
+              <text wx:if="{{iitem.commission > 0}}">
+                <text class="slant">/</text>
+                <text class="commission">赚{{iitem.commission}}</text>
+              </text>
              </view>
           </navigator>
         </view>
