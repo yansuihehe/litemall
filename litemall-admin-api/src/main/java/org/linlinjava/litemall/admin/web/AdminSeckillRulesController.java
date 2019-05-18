@@ -46,10 +46,10 @@ public class AdminSeckillRulesController {
     @GetMapping(value = "/list")
     public Object getSeckillRulesList(@RequestParam(defaultValue = "1") Integer page,
             @RequestParam(defaultValue = "10") Integer limit,
-            @RequestParam(required = false) String query,
+            @RequestParam(required = false) String goodsId,
             @Sort @RequestParam(defaultValue = "add_time") String sort,
             @Order @RequestParam(defaultValue = "desc") String order) {
-        List<LitemallSeckillRules> list = litemallSeckillRulesService.getSecKillRulesList(page, limit, sort, order, query);
+        List<LitemallSeckillRules> list = litemallSeckillRulesService.getSecKillRulesList(page, limit, sort, order, goodsId);
         return ResponseUtil.okList(list);
     }
 
