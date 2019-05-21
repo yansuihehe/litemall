@@ -84,7 +84,7 @@
           <el-cascader :options="categoryList" v-model="categoryIds" expand-trigger="hover" @change="handleCategoryChange"/>
         </el-form-item>
 
-        <el-form-item label="所属品牌商">
+        <el-form-item v-show="false" label="所属品牌商">
           <el-select v-model="goods.brandId">
             <el-option v-for="item in brandList" :key="item.value" :label="item.label" :value="item.value"/>
           </el-select>

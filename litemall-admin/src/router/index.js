@@ -100,6 +100,16 @@ export const asyncRouterMap = [
         }
       },
       {
+        path: 'withdraw-apply',
+        component: () => import('@/views/user/withdraw'),
+        name: 'withdraw-apply',
+        meta: {
+          perms: ['GET /admin/withdraw/list', 'POST /admin/withdraw/approve', 'POST /admin/withdraw/reject'],
+          title: '佣金提现',
+          noCache: true
+        }
+      },
+      {
         path: 'address',
         component: () => import('@/views/user/address'),
         name: 'address',
@@ -176,6 +186,7 @@ export const asyncRouterMap = [
         path: 'brand',
         component: () => import('@/views/mall/brand'),
         name: 'brand',
+        hidden: true,
         meta: {
           perms: ['GET /admin/brand/list', 'POST /admin/brand/create', 'GET /admin/brand/read', 'POST /admin/brand/update', 'POST /admin/brand/delete'],
           title: '品牌制造商',
@@ -358,16 +369,6 @@ export const asyncRouterMap = [
         meta: {
           perms: ['GET /admin/seckill/rules/list', 'POST /admin/seckill/rules/create', 'POST /admin/seckill/rules/update', 'POST /admin/seckill/rules/delete'],
           title: '秒杀活动',
-          noCache: true
-        }
-      },
-      {
-        path: 'withdraw-apply',
-        component: () => import('@/views/promotion/withdraw'),
-        name: 'withdraw-apply',
-        meta: {
-          perms: ['GET /admin/withdraw/list', 'POST /admin/withdraw/approve', 'POST /admin/withdraw/reject'],
-          title: '佣金提现',
           noCache: true
         }
       }
