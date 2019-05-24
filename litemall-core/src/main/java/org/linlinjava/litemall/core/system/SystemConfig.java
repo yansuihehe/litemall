@@ -11,6 +11,7 @@ public class SystemConfig {
     // 小程序相关配置
     public final static String LITEMALL_WX_INDEX_NEW = "litemall_wx_index_new";
     public final static String LITEMALL_WX_INDEX_HOT = "litemall_wx_index_hot";
+    public final static String LITEMALL_WX_INDEX_MEMBER = "litemall_wx_index_member";
     public final static String LITEMALL_WX_INDEX_BRAND = "litemall_wx_index_brand";
     public final static String LITEMALL_WX_INDEX_TOPIC = "litemall_wx_index_topic";
     public final static String LITEMALL_WX_INDEX_CATLOG_LIST = "litemall_wx_catlog_list";
@@ -54,6 +55,10 @@ public class SystemConfig {
 
     public static Integer getHotLimit() {
         return getConfigInt(LITEMALL_WX_INDEX_HOT);
+    }
+
+    public static Integer getMemberLimit() {
+        return getConfigInt(LITEMALL_WX_INDEX_MEMBER);
     }
 
     public static Integer getBrandLimit() {

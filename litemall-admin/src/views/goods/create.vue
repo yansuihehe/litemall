@@ -32,6 +32,12 @@
             <el-radio :label="true">热卖</el-radio>
           </el-radio-group>
         </el-form-item>
+        <el-form-item label="是否成为会员" prop="isMember">
+          <el-radio-group v-model="goods.isMember">
+            <el-radio :label="false">不是</el-radio>
+            <el-radio :label="true">是</el-radio>
+          </el-radio-group>
+        </el-form-item>
         <el-form-item label="是否在售" prop="isOnSale">
           <el-radio-group v-model="goods.isOnSale">
             <el-radio :label="true">在售</el-radio>

@@ -20,6 +20,19 @@ public class LitemallGoodsService {
     private LitemallGoodsMapper goodsMapper;
 
     /**
+     * 获取购买成为会员的商品
+     * @return
+     */
+    public List<LitemallGoods> queryByMember(int offset, int limit){
+        LitemallGoodsExample example = new LitemallGoodsExample();
+        example.or().andIsMemberEqualTo(true).andIsOnSaleEqualTo(true).andDeletedEqualTo(false);
+        example.setOrderByClause("add_time desc");
+        PageHelper.startPage(offset, limit);
+
+        return goodsMapper.selectByExampleSelective(example, columns);
+    }
+
+    /**
      * 获取热卖商品
      *
      * @param offset

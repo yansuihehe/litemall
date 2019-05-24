@@ -99,6 +99,8 @@ public class WxHomeController {
 
         Callable<List> hotGoodsListCallable = () -> goodsService.queryByHot(0, SystemConfig.getHotLimit());
 
+        Callable<List> memberGoodsListCallable = () -> goodsService.queryByMember(0, SystemConfig.getMemberLimit());
+
 //        Callable<List> brandListCallable = () -> brandService.query(0, SystemConfig.getBrandLimit());
 
         Callable<List> topicListCallable = () -> topicService.queryList(0, SystemConfig.getTopicLimit());
@@ -113,6 +115,7 @@ public class WxHomeController {
         FutureTask<List> couponListTask = new FutureTask<>(couponListCallable);
         FutureTask<List> newGoodsListTask = new FutureTask<>(newGoodsListCallable);
         FutureTask<List> hotGoodsListTask = new FutureTask<>(hotGoodsListCallable);
+        FutureTask<List> memberGoodsListTask = new FutureTask<>(memberGoodsListCallable);
 //        FutureTask<List> brandListTask = new FutureTask<>(brandListCallable);
         FutureTask<List> topicListTask = new FutureTask<>(topicListCallable);
         FutureTask<List> grouponListTask = new FutureTask<>(grouponListCallable);
@@ -123,6 +126,7 @@ public class WxHomeController {
         executorService.submit(couponListTask);
         executorService.submit(newGoodsListTask);
         executorService.submit(hotGoodsListTask);
+        executorService.submit(memberGoodsListTask);
 //        executorService.submit(brandListTask);
         executorService.submit(topicListTask);
         executorService.submit(grouponListTask);
@@ -135,6 +139,7 @@ public class WxHomeController {
             entity.put("couponList", couponListTask.get());
             entity.put("newGoodsList", newGoodsListTask.get());
             entity.put("hotGoodsList", hotGoodsListTask.get());
+            entity.put("memberGoodsList", memberGoodsListTask.get());
 //            entity.put("brandList", brandListTask.get());
             entity.put("topicList", topicListTask.get());
             entity.put("grouponList", grouponListTask.get());

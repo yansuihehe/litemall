@@ -11,7 +11,6 @@ import com.github.binarywang.wxpay.service.WxPayService;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.checkerframework.checker.units.qual.A;
 import org.linlinjava.litemall.core.express.ExpressService;
 import org.linlinjava.litemall.core.express.dao.ExpressInfo;
 import org.linlinjava.litemall.core.notify.NotifyService;
@@ -22,12 +21,12 @@ import org.linlinjava.litemall.core.util.DateTimeUtil;
 import org.linlinjava.litemall.core.util.IpUtil;
 import org.linlinjava.litemall.core.util.JacksonUtil;
 import org.linlinjava.litemall.core.util.ResponseUtil;
-import org.linlinjava.litemall.db.dao.LitemallSeckillRulesMapper;
 import org.linlinjava.litemall.db.domain.*;
 import org.linlinjava.litemall.db.service.*;
 import org.linlinjava.litemall.db.util.CouponUserConstant;
 import org.linlinjava.litemall.db.util.OrderHandleOption;
 import org.linlinjava.litemall.db.util.OrderUtil;
+import org.linlinjava.litemall.db.util.UserConstant;
 import org.linlinjava.litemall.wx.service.commission.FixAmountCommissionStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,10 +38,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.linlinjava.litemall.wx.util.WxResponseCode.*;
 
@@ -110,11 +106,12 @@ public class WxOrderService {
     @Autowired
     private FixAmountCommissionStrategy fixAmountCommissionStrategy;
     @Autowired
-    private LitemallSeckillRulesMapper litemallSeckillRulesMapper;
-    @Autowired
     private LitemallSeckillRulesService litemallSeckillRulesService;
     @Autowired
     private CommissionService commissionService;
+    @Autowired
+    private LitemallGoodsService goodsService;
+
 
     /**
      * 订单列表
@@ -255,7 +252,6 @@ public class WxOrderService {
         Integer grouponRulesId = JacksonUtil.parseInteger(body, "grouponRulesId");
         Integer grouponLinkId = JacksonUtil.parseInteger(body, "grouponLinkId");
         Integer seckillRulesId = JacksonUtil.parseInteger(body, "seckillRulesId");
-        Integer seckillId = JacksonUtil.parseInteger(body, "seckillId");
 
         //如果是团购项目,验证活动是否有效
         if (grouponRulesId != null && grouponRulesId > 0) {
@@ -463,9 +459,26 @@ public class WxOrderService {
             grouponService.createGroupon(groupon);
         }
 
+        //如果是购买后成为会员商品 则改变用户为会员
+        Optional<LitemallCart> first = checkedGoodsList.stream().filter(checkGoods -> isMemberGoods(checkGoods)).findFirst();
+        if(first.isPresent() && user.getUserLevel().equals(UserConstant.USER_LEVEL_NOMAL)){
+            user.setUserLevel(UserConstant.USER_LEVEL_VIP);
+            userService.updateById(user);
+        }
+
         Map<String, Object> data = new HashMap<>();
         data.put("orderId", orderId);
         return ResponseUtil.ok(data);
+    }
+
+    /**
+     * 判断购物车中的商品是否是会员商品(实时查询 不在购物车保存状态)
+     * @param checkGoods
+     * @return
+     */
+    private boolean isMemberGoods(LitemallCart checkGoods){
+        LitemallGoods goods = goodsService.findById(checkGoods.getGoodsId());
+        return goods != null && !goods.getDeleted() && goods.getIsOnSale() && goods.getIsMember();
     }
 
     /**
