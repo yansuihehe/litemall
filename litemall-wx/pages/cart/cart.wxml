@@ -26,20 +26,20 @@
           <view class="goods">
             <view class="item {{isEditCart ? 'edit' : ''}}" wx:for="{{cartGoods}}" wx:key="id">
               <view class="checkbox {{item.checked ? 'checked' : ''}}" bindtap="checkedItem" data-item-index="{{index}}"></view>
-              <view class="cart-goods">
+              <view class="cart-goods" data-id="{{item.goodsId}}" bindtap="toGoodsPage">
                 <image class="img" src="{{item.picUrl}}"></image>
                 <view class="info">
                   <view class="t">
                     <text class="name">{{item.goodsName}}</text>
                     <text class="num">x{{item.number}}</text>
                   </view>
-                  <view class="attr">{{ isEditCart ? '已选择:' : ''}}{{item.goodsSpecificationValues||''}}</view>
+                  <view class="attr">{{ isEditCart ? '已选择:' : ''}}{{item.specifications||''}}</view>
                   <view class="b">
                     <text class="price">￥{{item.price}}</text>
                     <view class="selnum">
-                      <view class="cut" bindtap="cutNumber" data-item-index="{{index}}">-</view>
+                      <view class="cut" catchtap="cutNumber" data-item-index="{{index}}">-</view>
                       <input value="{{item.number}}" class="number" disabled="true" type="number" />
-                      <view class="add" bindtap="addNumber" data-item-index="{{index}}">+</view>
+                      <view class="add" catchtap="addNumber" data-item-index="{{index}}">+</view>
                     </view>
                   </view>
                 </view>

@@ -299,5 +299,12 @@ Page({
         checkedAllStatus: that.isCheckedAll()
       });
     });
+  },
+
+  toGoodsPage: function(event) {
+    console.log(event)
+    wx.navigateTo({
+      url: '/pages/goods/goods?id=' + event.currentTarget.dataset.id
+    })
   }
 })
