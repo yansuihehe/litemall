@@ -52,7 +52,6 @@ public interface LitemallRegionMapper {
      * This method corresponds to the database table litemall_region
      *
      * @mbg.generated
-     * @project https://github.com/itfsw/mybatis-generator-plugin
      */
     LitemallRegion selectOneByExample(LitemallRegionExample example);
 
@@ -61,7 +60,6 @@ public interface LitemallRegionMapper {
      * This method corresponds to the database table litemall_region
      *
      * @mbg.generated
-     * @project https://github.com/itfsw/mybatis-generator-plugin
      */
     LitemallRegion selectOneByExampleSelective(@Param("example") LitemallRegionExample example, @Param("selective") LitemallRegion.Column ... selective);
 
@@ -70,7 +68,6 @@ public interface LitemallRegionMapper {
      * This method corresponds to the database table litemall_region
      *
      * @mbg.generated
-     * @project https://github.com/itfsw/mybatis-generator-plugin
      */
     List<LitemallRegion> selectByExampleSelective(@Param("example") LitemallRegionExample example, @Param("selective") LitemallRegion.Column ... selective);
 
@@ -87,7 +84,6 @@ public interface LitemallRegionMapper {
      * This method corresponds to the database table litemall_region
      *
      * @mbg.generated
-     * @project https://github.com/itfsw/mybatis-generator-plugin
      */
     LitemallRegion selectByPrimaryKeySelective(@Param("id") Integer id, @Param("selective") LitemallRegion.Column ... selective);
 
