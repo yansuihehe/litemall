@@ -14,9 +14,9 @@
       <view class="close" bindtap="closeShare">
         <image class="icon" src="/static/images/icon_close.png"></image>
       </view>
-      <view class="share-notes">
+      <view class="share-notes" wx:if="{{goods.commission > 0}}">
         <view class="h">分享赚<text class="m">佣金</text></view>
-        <view class="d">分享一下，赚取佣金。分享成功后，您还能获得<text style="color:#ff7128">{{goods.commission}}</text>元的分享奖励,抓紧来分享吧！！</view>
+        <view class="d">分享一下，赚取佣金。分享下单成功后，您还能获得<text style="color:#ff7128">{{goods.commission}}</text>元的奖励,抓紧来分享吧！！</view>
       </view>
       <view class='share-info'>
         <button class="sharebtn" open-type="share" wx:if="{{!isGroupon}}">
@@ -185,7 +185,7 @@
 
     </view>
   </view>
-  
+
   <!--确定按钮-->
   <view class="confirm-info">
     <view class="confirm-btn" bindtap="addToBuy">确定</view>
