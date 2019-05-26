@@ -247,7 +247,7 @@ export default {
             this.dialogFormVisible = false
             this.$notify.success({
               title: '成功',
-              message: '更新团购规则成功'
+              message: '更新秒杀规则成功'
             })
           }).catch(response => {
             this.$notify.error({
@@ -262,7 +262,7 @@ export default {
       deleteSeckill(row).then(response => {
         this.$notify.success({
           title: '成功',
-          message: '删除团购规则成功'
+          message: '删除秒杀规则成功'
         })
         const index = this.list.indexOf(row)
         this.list.splice(index, 1)

@@ -11,4 +11,39 @@
         set number = number - #{num,jdbcType=INTEGER}, update_time = now()
         where id = #{id,jdbcType=INTEGER} and number >= #{num,jdbcType=INTEGER}
     </update>
+    <update id="updateByGoodsIdAndSpecifications" parameterType="map">
+        update litemall_goods_product
+        <set>
+            <if test="record.goodsId != null">
+                goods_id = #{record.goodsId,jdbcType=INTEGER},
+            </if>
+            <if test="record.specifications != null">
+                specifications = #{record.specifications,jdbcType=VARCHAR,typeHandler=org.linlinjava.litemall.db.mybatis.JsonStringArrayTypeHandler},
+            </if>
+            <if test="record.price != null">
+                price = #{record.price,jdbcType=DECIMAL},
+            </if>
+            <if test="record.memberPrice != null">
+                member_price = #{record.memberPrice,jdbcType=DECIMAL},
+            </if>
+            <if test="record.number != null">
+                `number` = #{record.number,jdbcType=INTEGER},
+            </if>
+            <if test="record.commission != null">
+                commission = #{record.commission,jdbcType=DECIMAL},
+            </if>
+            <if test="record.url != null">
+                url = #{record.url,jdbcType=VARCHAR},
+            </if>
+            <if test="record.updateTime != null">
+                update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.deleted != null">
+                deleted = #{record.deleted,jdbcType=BIT},
+            </if>
+        </set>
+        <where>
+            goods_id = #{record.goodsId, jdbcType=INTEGER} and specifications = #{record.specifications,jdbcType=VARCHAR,typeHandler=org.linlinjava.litemall.db.mybatis.JsonStringArrayTypeHandler}
+        </where>
+    </update>
 </mapper>

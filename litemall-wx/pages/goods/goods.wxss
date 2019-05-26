@@ -131,18 +131,19 @@
 .goods-info .price {
   height: 70rpx;
   align-content: center;
+  line-height: 30rpx;
 }
 
 .goods-info .counterPrice {
   float: left;
-  padding-left: 0rpx;
+  padding-left: 5%;
   text-decoration: line-through;
-  font-size: 30rpx;
+  font-size: 25rpx;
   color: #999;
 }
 
 .goods-info .retailPrice {
-  padding-left: 5%;
+  /*padding-left: 5%;*/
   font-size: 30rpx;
   color: #a78845;
   float:left;
@@ -776,6 +777,7 @@
   height: 33rpx;
   line-height: 33rpx;
   margin-bottom: 10rpx;
+  display: inline-block;
 }
 
 .attr-pop .a {
@@ -783,6 +785,14 @@
   color: #333;
   height: 40rpx;
   line-height: 40rpx;
+}
+
+.attr-pop .seckill {
+  font-size: 20rpx;
+  color: #F00;
+  margin-bottom: 10rpx;
+  margin-left: 10rpx;
+  display: inline-block;
 }
 
 .spec-con {

@@ -70,5 +70,12 @@ public interface LitemallSeckillRulesService {
      */
     Map seckillRuleDetail(Integer id);
 
+    /**
+     * 根据货品id查询
+     * @param productId
+     * @return
+     */
+    List<LitemallSeckillRules> queryByProductId(Integer productId);
+
 
 }

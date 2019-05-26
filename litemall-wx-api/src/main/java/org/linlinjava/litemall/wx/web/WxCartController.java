@@ -7,14 +7,7 @@ import org.linlinjava.litemall.core.filter.RequestContext;
 import org.linlinjava.litemall.core.system.SystemConfig;
 import org.linlinjava.litemall.core.util.JacksonUtil;
 import org.linlinjava.litemall.core.util.ResponseUtil;
-import org.linlinjava.litemall.db.domain.LitemallAddress;
-import org.linlinjava.litemall.db.domain.LitemallCart;
-import org.linlinjava.litemall.db.domain.LitemallCoupon;
-import org.linlinjava.litemall.db.domain.LitemallCouponUser;
-import org.linlinjava.litemall.db.domain.LitemallGoods;
-import org.linlinjava.litemall.db.domain.LitemallGoodsProduct;
-import org.linlinjava.litemall.db.domain.LitemallGrouponRules;
-import org.linlinjava.litemall.db.domain.LitemallUser;
+import org.linlinjava.litemall.db.domain.*;
 import org.linlinjava.litemall.db.service.CouponVerifyService;
 import org.linlinjava.litemall.db.service.LitemallAddressService;
 import org.linlinjava.litemall.db.service.LitemallCartService;
@@ -156,13 +149,17 @@ public class WxCartController {
             cart.setGoodsSn(goods.getGoodsSn());
             cart.setGoodsName((goods.getName()));
             cart.setPicUrl(goods.getPicUrl());
-            // 判断是否为会员，如果为会员则返回会员价格
-            // 会员价不为空，且不为0.00
-            if (RequestContext.data().getUserLevel() == 1 && product.getMemberPrice() != null && product.getMemberPrice() != BigDecimal.ZERO) {
-                cart.setPrice(product.getMemberPrice());
-            } else {
-                cart.setPrice(product.getPrice());
-            }
+
+//            // 判断是否为会员，如果为会员则返回会员价格
+//            // 会员价不为空，且不为0.00
+//            if (RequestContext.data().getUserLevel() == 1 && product.getMemberPrice() != null && product.getMemberPrice() != BigDecimal.ZERO) {
+//                cart.setPrice(product.getMemberPrice());
+//            } else {
+//                cart.setPrice(product.getPrice());
+//            }
+            //统一提取 成价格计算 秒杀 等
+            PriceVo finalPrice = goodsService.getFinalPrice(userId, productId);
+            cart.setPrice(finalPrice.getFinalPrice());
             cart.setSpecifications(product.getSpecifications());
             cart.setUserId(userId);
             cart.setChecked(true);

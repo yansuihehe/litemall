@@ -2,22 +2,36 @@ package org.linlinjava.litemall.db.service;
 
 import com.github.pagehelper.PageHelper;
 import org.linlinjava.litemall.db.dao.LitemallGoodsMapper;
-import org.linlinjava.litemall.db.domain.LitemallGoods;
+import org.linlinjava.litemall.db.domain.*;
 import org.linlinjava.litemall.db.domain.LitemallGoods.Column;
-import org.linlinjava.litemall.db.domain.LitemallGoodsExample;
+import org.linlinjava.litemall.db.util.GoodsConstant;
+import org.linlinjava.litemall.db.util.UserConstant;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class LitemallGoodsService {
     Column[] columns = new Column[]{Column.id, Column.name, Column.brief, Column.picUrl, Column.isHot, Column.isNew, Column.counterPrice, Column.retailPrice, Column.commission};
     @Resource
     private LitemallGoodsMapper goodsMapper;
+
+    @Autowired
+    private LitemallSeckillRulesService seckillRulesService;
+
+    @Autowired
+    private LitemallGoodsProductService goodsProductService;
+
+    @Autowired
+    private LitemallUserService litemallUserService;
 
     /**
      * 获取购买成为会员的商品
@@ -259,5 +273,38 @@ public class LitemallGoodsService {
         LitemallGoodsExample example = new LitemallGoodsExample();
         example.or().andNameEqualTo(name).andIsOnSaleEqualTo(true).andDeletedEqualTo(false);
         return goodsMapper.countByExample(example) != 0;
+    }
+
+    /**
+     * 获取货品最终的价格 秒杀优先级高于会员价
+     * @param userId
+     * @param productId
+     * @return
+     */
+    public PriceVo getFinalPrice(Integer userId, Integer productId){
+        LitemallGoodsProduct product = goodsProductService.findById(productId);
+        //是否有秒杀
+        List<LitemallSeckillRules> litemallSeckillRules = seckillRulesService.queryByProductId(productId);
+        if(!CollectionUtils.isEmpty(litemallSeckillRules)){
+            Optional<LitemallSeckillRules> first = litemallSeckillRules.stream().filter(rule -> LocalDateTime.now().isAfter(rule.getBeginTime())
+                    && LocalDateTime.now().isBefore(rule.getExpireTime())
+                    && !rule.getDeleted()).findFirst();
+            if(first.isPresent()){
+                return new PriceVo(first.get().getSeckillPrice(), GoodsConstant.DiscountType.SECKILL_PRICE.getType(), GoodsConstant.DiscountType.SECKILL_PRICE.getName(), product.getPrice());
+            }
+        }
+
+        //没有秒杀 判断是否是会员
+        LitemallUser user = litemallUserService.findById(userId);
+        if(product.getMemberPrice() != null
+                && product.getMemberPrice().compareTo(BigDecimal.ZERO) == 1
+                && user.getUserLevel() == UserConstant.USER_LEVEL_VIP){
+            return new PriceVo(product.getMemberPrice(), GoodsConstant.DiscountType.VIP_PRICE.getType(), GoodsConstant.DiscountType.VIP_PRICE.getName(), product.getPrice());
+        }
+
+        //...其他类型优惠
+
+        //没有优惠则返回原始价格
+        return new PriceVo(product.getPrice(), GoodsConstant.DiscountType.NOMAL.getType(), GoodsConstant.DiscountType.NOMAL.getName(), product.getPrice());
     }
 }

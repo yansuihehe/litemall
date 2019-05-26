@@ -1,5 +1,6 @@
 package org.linlinjava.litemall.admin.service;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.linlinjava.litemall.admin.dto.GoodsAllinone;
@@ -20,6 +21,7 @@ import org.linlinjava.litemall.db.service.LitemallGoodsProductService;
 import org.linlinjava.litemall.db.service.LitemallGoodsService;
 import org.linlinjava.litemall.db.service.LitemallGoodsSpecificationService;
 import org.linlinjava.litemall.db.service.LitemallOrderGoodsService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -177,7 +179,7 @@ public class AdminGoodsService {
         Integer gid = goods.getId();
         specificationService.deleteByGid(gid);
         attributeService.deleteByGid(gid);
-        productService.deleteByGid(gid);
+//        productService.deleteByGid(gid);//fixme 货品最好不这么玩 因为id在其他地方有关联
 
         // 商品规格表litemall_goods_specification
         for (LitemallGoodsSpecification specification : specifications) {
@@ -192,12 +194,42 @@ public class AdminGoodsService {
         }
 
         // 商品货品表litemall_product
-        for (LitemallGoodsProduct product : products) {
-            product.setGoodsId(goods.getId());
+//        for (LitemallGoodsProduct product : products) {
+//            product.setGoodsId(goods.getId());
+//            productService.add(product);
+//        }
+        handleProduct(products, goods.getId());
+
+        return ResponseUtil.ok();
+    }
+
+    /**
+     * 单独处理货品 判断增加的新增 删除的删除 其他的修改 如何判断呢？goodsId+specifications
+     * @param newProducts
+     */
+    private void handleProduct(LitemallGoodsProduct[] newProducts, Integer goodsId){
+        //查询db中的货品
+        List<LitemallGoodsProduct> oldProducts = productService.queryByGid(goodsId);
+        Collection<LitemallGoodsProduct> tobeAdd = CollectionUtils.subtract(Arrays.asList(newProducts), oldProducts);
+        Collection<LitemallGoodsProduct> tobeDelete = CollectionUtils.subtract(oldProducts, Arrays.asList(newProducts));
+        Collection<LitemallGoodsProduct> tobeUpdate = CollectionUtils.intersection(oldProducts, Arrays.asList(newProducts));
+
+        for (LitemallGoodsProduct product : tobeAdd) {
+            product.setGoodsId(goodsId);
             productService.add(product);
         }
 
-        return ResponseUtil.ok();
+        for (LitemallGoodsProduct product : tobeDelete) {
+            productService.deleteById(product.getId());
+        }
+
+        for (LitemallGoodsProduct product : tobeUpdate) {
+            Optional<LitemallGoodsProduct> first = Arrays.asList(newProducts).stream().filter(newProduct -> newProduct.equals(product)).findFirst();
+            if(first.isPresent()){
+                BeanUtils.copyProperties(first.get(), product);
+                productService.updateByGoodsIdAndSpecifications(product);
+            }
+        }
     }
 
     @Transactional

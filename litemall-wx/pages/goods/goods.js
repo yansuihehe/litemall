@@ -23,6 +23,7 @@ Page({
     checkedSpecText: '规格数量选择',
     tmpSpecText: '请选择规格数量',
     checkedSpecPrice: 0,
+    checkedSpecDiscountName: '',
     openAttr: false,
     openShare: false,
     noCollectImage: '/static/images/icon_collect.png',
@@ -33,6 +34,7 @@ Page({
     soldout: false,
     canWrite: false, //用户是否获取了保存相册的权限
     actionType:"",//购买操作类型
+    seckill: []
   },
 
   // 页面分享
@@ -183,7 +185,8 @@ Page({
           userHasCollect: res.data.userHasCollect,
           shareImage: res.data.shareImage,
           checkedSpecPrice: res.data.info.retailPrice,
-          groupon: res.data.groupon
+          groupon: res.data.groupon,
+          seckill: res.data.seckill
         });
 
         //如果是通过分享的团购参加团购，则团购项目应该与分享的一致并且不可更改
@@ -389,14 +392,29 @@ Page({
       }
 
       let checkedProduct = checkedProductArray[0];
+      // 设置默认值
+      this.setData({
+        checkedSpecDiscountName: '',
+        checkedSpecPrice: checkedProduct.price,
+        soldout: false
+      })
       if (checkedProduct.number > 0) {
-        this.setData({
-          checkedSpecPrice: checkedProduct.price,
-          soldout: false
-        });
+        //是否有秒杀价
+        if (this.data.seckill && this.data.seckill.length > 0) {
+          let seckillProduct = this.data.seckill.filter(function(item){
+            return item.productId == checkedProduct.id
+          })
+          if(seckillProduct && seckillProduct.length > 0){
+            this.setData({
+              checkedSpecDiscountName: '秒杀价',
+              checkedSpecPrice: seckillProduct[0].seckillPrice
+            })
+          }
+        }
       } else {
         this.setData({
           checkedSpecPrice: this.data.goods.retailPrice,
+          checkedSpecDiscountName: '',
           soldout: true
         });
       }

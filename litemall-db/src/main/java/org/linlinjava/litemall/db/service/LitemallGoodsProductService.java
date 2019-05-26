@@ -56,4 +56,14 @@ public class LitemallGoodsProductService {
     public int reduceStock(Integer id, Short num){
         return goodsProductMapper.reduceStock(id, num);
     }
+
+    /**
+     * 根据商品id和规格更新货品
+     * @param product
+     * @return
+     */
+    public int updateByGoodsIdAndSpecifications(LitemallGoodsProduct product){
+        product.setUpdateTime(LocalDateTime.now());
+        return goodsProductMapper.updateByGoodsIdAndSpecifications(product);
+    }
 }

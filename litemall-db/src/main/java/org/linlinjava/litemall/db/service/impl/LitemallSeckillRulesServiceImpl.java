@@ -110,7 +110,7 @@ public class LitemallSeckillRulesServiceImpl implements LitemallSeckillRulesServ
     @Override
     public List<LitemallSeckillRules> queryByGoodId(Integer goodId) {
         LitemallSeckillRulesExample example = new LitemallSeckillRulesExample();
-        example.or().andGoodsIdEqualTo(goodId).andDeletedEqualTo(false);
+        example.or().andGoodsIdEqualTo(goodId).andDeletedEqualTo(false).andBeginTimeLessThanOrEqualTo(LocalDateTime.now()).andExpireTimeGreaterThanOrEqualTo(LocalDateTime.now());
         return litemallSeckillRulesMapper.selectByExample(example);
     }
 
@@ -126,5 +126,12 @@ public class LitemallSeckillRulesServiceImpl implements LitemallSeckillRulesServ
     @Override
     public Map seckillRuleDetail(Integer id) {
         return null;
+    }
+
+    @Override
+    public List<LitemallSeckillRules> queryByProductId(Integer productId) {
+        LitemallSeckillRulesExample example = new LitemallSeckillRulesExample();
+        example.or().andProductIdEqualTo(productId).andDeletedEqualTo(false);
+        return litemallSeckillRulesMapper.selectByExample(example);
     }
 }
