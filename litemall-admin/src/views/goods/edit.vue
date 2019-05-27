@@ -381,6 +381,7 @@ export default {
   },
   methods: {
     init: function() {
+      this.editLoading = true
       if (this.$route.query.id == null) {
         return
       }
@@ -403,6 +404,7 @@ export default {
         if (keywords !== null) {
           this.keywords = keywords.split(',')
         }
+        this.editLoading = false
       })
 
       listCatAndBrand().then(response => {

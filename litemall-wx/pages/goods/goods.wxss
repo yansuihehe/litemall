@@ -787,6 +787,22 @@
   line-height: 40rpx;
 }
 
+.attr-pop .member-price {
+  font-size: 20rpx;
+  color: #F00;
+  margin-bottom: 10rpx;
+  margin-left: 20rpx;
+  display: inline-block;
+}
+
+.attr-pop .member-name {
+  font-size: 20rpx;
+  color: #F00;
+  margin-bottom: 10rpx;
+  margin-left: 10rpx;
+  display: inline-block;
+}
+
 .attr-pop .seckill {
   font-size: 20rpx;
   color: #F00;

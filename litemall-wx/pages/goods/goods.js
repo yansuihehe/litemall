@@ -22,8 +22,10 @@ Page({
     number: 1,
     checkedSpecText: '规格数量选择',
     tmpSpecText: '请选择规格数量',
-    checkedSpecPrice: 0,
-    checkedSpecDiscountName: '',
+    checkedSpecPrice: 0, // 展示的价格（大价格）
+    checkedSpecSubPrice: 0,// 副价格（小价格）
+    checkedSpecDiscountName: '',// 优惠名称
+    checkedSpecDiscountType: 0,// 优惠类型 0 无优惠 1 会员价 2 秒杀价
     openAttr: false,
     openShare: false,
     noCollectImage: '/static/images/icon_collect.png',
@@ -392,28 +394,16 @@ Page({
       }
 
       let checkedProduct = checkedProductArray[0];
-      // 设置默认值
-      this.setData({
-        checkedSpecDiscountName: '',
-        checkedSpecPrice: checkedProduct.price,
-        soldout: false
-      })
       if (checkedProduct.number > 0) {
-        //是否有秒杀价
-        if (this.data.seckill && this.data.seckill.length > 0) {
-          let seckillProduct = this.data.seckill.filter(function(item){
-            return item.productId == checkedProduct.id
-          })
-          if(seckillProduct && seckillProduct.length > 0){
-            this.setData({
-              checkedSpecDiscountName: '秒杀价',
-              checkedSpecPrice: seckillProduct[0].seckillPrice
-            })
-          }
-        }
+        // this.setData({
+        //   checkedSpecPrice: checkedProduct.price,
+        //   soldout: false
+        // });
+        this.setProductPrice(checkedProduct)
       } else {
         this.setData({
           checkedSpecPrice: this.data.goods.retailPrice,
+          checkedSpecDiscountType: 0,
           checkedSpecDiscountName: '',
           soldout: true
         });
@@ -423,10 +413,51 @@ Page({
       this.setData({
         checkedSpecText: '规格数量选择',
         checkedSpecPrice: this.data.goods.retailPrice,
+        checkedSpecDiscountType: 0,
+        checkedSpecDiscountName: '',
         soldout: false
       });
     }
 
+  },
+
+  /**
+   * 获取货品的价格展示对象
+   * @param checkedProduct
+   */
+  setProductPrice: function(checkedProduct) {
+    //是否有秒杀价
+    if (this.data.seckill && this.data.seckill.length > 0) {
+      let seckillProduct = this.data.seckill.filter(function(item){
+        return item.productId == checkedProduct.id
+      })
+      if(seckillProduct && seckillProduct.length > 0){
+        this.setData({
+          checkedSpecDiscountType: 2,
+          checkedSpecDiscountName: '秒杀价',
+          checkedSpecPrice: seckillProduct[0].seckillPrice
+        })
+        return
+      }
+    }
+
+    //是否有会员价
+    if (checkedProduct.memberPrice && checkedProduct.memberPrice > 0) {
+      this.setData({
+        checkedSpecDiscountType: 1,
+        checkedSpecDiscountName: '会员价',
+        checkedSpecPrice: checkedProduct.price,
+        checkedSpecSubPrice: checkedProduct.memberPrice
+      })
+      return
+    }
+
+    // 其他设置成普通价
+    this.setData({
+      checkedSpecDiscountType: 0,
+      checkedSpecDiscountName: '',
+      checkedSpecPrice: checkedProduct.price
+    })
   },
 
   // 获取选中的产品（根据规格）

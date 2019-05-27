@@ -149,9 +149,20 @@
       <image class="img" src="{{goods.picUrl}}"></image>
       <view class="info">
         <view class="c">
-          <view>
+          <!--普通价格-->
+          <view wx:if="{{checkedSpecDiscountType === 0}}">
             <view class="p">价格：￥{{checkedSpecPrice}}</view>
-            <view wx:if="{{checkedSpecDiscountName != null && checkedSpecDiscountName != ''}}" class="seckill">({{checkedSpecDiscountName}})</view>
+          </view>
+          <!--有会员价-->
+          <view wx:elif="{{checkedSpecDiscountType === 1}}">
+            <view class="p">价格：￥{{checkedSpecPrice}}</view>
+            <view class="member-price">{{checkedSpecSubPrice}}</view>
+            <view class="member-name">({{checkedSpecDiscountName}})</view>
+          </view>
+          <!--秒杀-->
+          <view wx:elif="{{checkedSpecDiscountType === 2}}">
+            <view class="p">价格：￥{{checkedSpecPrice}}</view>
+            <view class="seckill">({{checkedSpecDiscountName}})</view>
           </view>
           <view class="a">{{tmpSpecText}}</view>
         </view>
