@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container">
+  <div v-loading="editLoading" class="app-container">
 
     <el-card class="box-card">
       <h3>商品介绍</h3>
@@ -365,7 +365,8 @@ export default {
               failure('上传失败，请重新上传')
             })
         }
-      }
+      },
+      editLoading: false
     }
   },
   computed: {
@@ -416,6 +417,7 @@ export default {
       this.$router.push({ path: '/goods/list' })
     },
     handleEdit: function() {
+      this.editLoading = true
       const finalGoods = {
         goods: this.goods,
         specifications: this.specifications,
@@ -428,9 +430,11 @@ export default {
             title: '成功',
             message: '创建成功'
           })
+          this.editLoading = false
           this.$router.push({ path: '/goods/list' })
         })
         .catch(response => {
+          this.editLoading = false
           MessageBox.alert('业务错误：' + response.data.errmsg, '警告', {
             confirmButtonText: '确定',
             type: 'error'
