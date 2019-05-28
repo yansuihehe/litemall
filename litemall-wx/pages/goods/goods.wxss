@@ -811,6 +811,15 @@
   display: inline-block;
 }
 
+.attr-pop .o-price {
+  margin-left: 10rpx;
+  margin-bottom: 10rpx;
+  font-size: 20rpx;
+  color: #999;
+  text-decoration: line-through;
+  display: inline-block;
+}
+
 .spec-con {
   width: 100%;
   height: auto;

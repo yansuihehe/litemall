@@ -151,18 +151,19 @@
         <view class="c">
           <!--普通价格-->
           <view wx:if="{{checkedSpecDiscountType === 0}}">
-            <view class="p">价格：￥{{checkedSpecPrice}}</view>
+            <view class="p">￥{{checkedSpecPrice}}</view>
           </view>
           <!--有会员价-->
           <view wx:elif="{{checkedSpecDiscountType === 1}}">
-            <view class="p">价格：￥{{checkedSpecPrice}}</view>
+            <view class="p">￥{{checkedSpecPrice}}</view>
             <view class="member-price">{{checkedSpecSubPrice}}</view>
             <view class="member-name">({{checkedSpecDiscountName}})</view>
           </view>
           <!--秒杀-->
           <view wx:elif="{{checkedSpecDiscountType === 2}}">
-            <view class="p">价格：￥{{checkedSpecPrice}}</view>
+            <view class="p">￥{{checkedSpecPrice}}</view>
             <view class="seckill">({{checkedSpecDiscountName}})</view>
+            <view class="o-price">￥{{checkedSpecSubPrice}}</view>
           </view>
           <view class="a">{{tmpSpecText}}</view>
         </view>

@@ -435,7 +435,8 @@ Page({
         this.setData({
           checkedSpecDiscountType: 2,
           checkedSpecDiscountName: '秒杀价',
-          checkedSpecPrice: seckillProduct[0].seckillPrice
+          checkedSpecPrice: seckillProduct[0].seckillPrice,
+          checkedSpecSubPrice: checkedProduct.price
         })
         return
       }
