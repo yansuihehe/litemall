@@ -54,7 +54,7 @@
       </view>-->
     </view>
   </view>
-  <view class="section-nav section-attr" bindtap="switchAttrPop">
+  <view wx:if="{{!isSingleSpecification}}" class="section-nav section-attr" bindtap="switchAttrPop">
     <view class="t">{{checkedSpecText}}</view>
     <image class="i" src="/static/images/address_right.png" background-size="cover"></image>
   </view>
@@ -165,17 +165,19 @@
             <view class="seckill">({{checkedSpecDiscountName}})</view>
             <view class="o-price">￥{{checkedSpecSubPrice}}</view>
           </view>
-          <view class="a">{{tmpSpecText}}</view>
+          <view wx:if="{{!isSingleSpecification}}" class="a">{{tmpSpecText}}</view>
         </view>
       </view>
     </view>
 
     <!-- 规格列表 -->
     <view class="spec-con">
-      <view class="spec-item" wx:for="{{specificationList}}" wx:key="name">
-        <view class="name">{{item.name}}</view>
-        <view class="values">
-          <view class="value {{vitem.checked ? 'selected' : ''}}" bindtap="clickSkuValue" wx:for="{{item.valueList}}" wx:for-item="vitem" wx:key="{{vitem.id}}" data-value-id="{{vitem.id}}" data-name="{{vitem.specification}}">{{vitem.value}}</view>
+      <view wx:if="{{!isSingleSpecification}}">
+        <view class="spec-item" wx:for="{{specificationList}}" wx:key="name">
+          <view class="name">{{item.name}}</view>
+          <view class="values">
+            <view class="value {{vitem.checked ? 'selected' : ''}}" bindtap="clickSkuValue" wx:for="{{item.valueList}}" wx:for-item="vitem" wx:key="{{vitem.id}}" data-value-id="{{vitem.id}}" data-name="{{vitem.specification}}">{{vitem.value}}</view>
+          </view>
         </view>
       </view>
 

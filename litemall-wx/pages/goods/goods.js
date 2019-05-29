@@ -36,7 +36,8 @@ Page({
     soldout: false,
     canWrite: false, //用户是否获取了保存相册的权限
     actionType:"",//购买操作类型
-    seckill: []
+    seckill: [],
+    isSingleSpecification: false //是否是单一规格
   },
 
   // 页面分享
@@ -172,6 +173,7 @@ Page({
             that.setData({
               checkedSpecText: _specificationList[0].valueList[0].value,
               tmpSpecText: '已选择：' + _specificationList[0].valueList[0].value,
+              isSingleSpecification: true
             });
           }
         }
