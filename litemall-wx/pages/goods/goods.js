@@ -37,7 +37,8 @@ Page({
     canWrite: false, //用户是否获取了保存相册的权限
     actionType:"",//购买操作类型
     seckill: [],
-    isSingleSpecification: false //是否是单一规格
+    isSingleSpecification: false, //是否是单一规格
+    cartConfirmBtnDisabled: false //规格弹框确认按钮禁用
   },
 
   // 页面分享
@@ -222,6 +223,9 @@ Page({
         WxParse.wxParse('goodsDetail', 'html', res.data.info.detail, that);
         //获取推荐商品
         that.getGoodsRelated();
+
+        //计算商品价格
+        that.changeSpecInfo();
       }
     });
   },
@@ -629,13 +633,21 @@ Page({
 
   //添加到购物车
   addToCart: function() {
-    var that = this;
+    let that = this;
     if (this.data.openAttr == false) {
       //打开规格选择窗口
       this.setData({
         openAttr: !this.data.openAttr
       });
     } else {
+
+      if (that.data.cartConfirmBtnDisabled) {
+        return
+      } else {
+        that.setData({
+          cartConfirmBtnDisabled: true
+        })
+      }
 
       //提示选择完整规格
       if (!this.isCheckedAllSpec()) {
@@ -692,6 +704,10 @@ Page({
                 collectImage: that.data.noCollectImage
               });
             }
+            //防重
+            that.setData({
+              cartConfirmBtnDisabled: false
+            })
           } else {
             wx.showToast({
               image: '/static/images/icon_error.png',
@@ -707,11 +723,11 @@ Page({
 
   //添加到购物车或者立即购买（先自动计入购物车）
   addToBuy:function(event){
-      let that=this;
-      if(event.currentTarget.dataset.type){
-        that.setData({
-            actionType: event.currentTarget.dataset.type
-        });
+    let that=this;
+    if(event.currentTarget.dataset.type){
+      that.setData({
+          actionType: event.currentTarget.dataset.type
+      });
     }
     if(that.data.actionType=="cart"){
         that.addToCart();

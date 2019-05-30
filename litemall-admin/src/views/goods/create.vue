@@ -403,6 +403,16 @@ export default {
       return {
         'X-Litemall-Admin-Token': getToken()
       }
+    },
+    goodsRetailPrice() {
+      const productPrices = this.products.map(function(item) {
+        return Number(item.price)
+      })
+      if (productPrices && productPrices.length > 0) {
+        return Math.min(...productPrices)
+      } else {
+        return null
+      }
     }
   },
   created() {
@@ -430,6 +440,11 @@ export default {
         products: this.products,
         attributes: this.attributes
       }
+      // 重新设置为所有货品中的最低价
+      if (finalGoods.goods.retailPrice == null) {
+        finalGoods.goods.retailPrice = this.goodsRetailPrice
+      }
+
       publishGoods(finalGoods).then(response => {
         this.$notify.success({
           title: '成功',
