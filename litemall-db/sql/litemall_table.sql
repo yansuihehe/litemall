@@ -746,6 +746,7 @@ CREATE TABLE `litemall_user` (
   `session_key` varchar(100) NOT NULL DEFAULT '' COMMENT '微信登录会话KEY',
   `commission_amount` decimal(16,2) NOT NULL DEFAULT '0.00' COMMENT '当前用户账户中的佣金金额',
   `withdraw_amount` decimal(16,2) NOT NULL DEFAULT '0.00' COMMENT '用户已提现金额',
+  `superior` int(11) DEFAULT NULL COMMENT '上级用户的id',
   `status` tinyint(3) NOT NULL DEFAULT '0' COMMENT '0 可用, 1 禁用, 2 注销',
   `add_time` datetime DEFAULT NULL COMMENT '创建时间',
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
